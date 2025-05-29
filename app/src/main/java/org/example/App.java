@@ -3,12 +3,13 @@
  */
 package org.example;
 
+import java.util.prefs.Preferences;
+
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import java.util.prefs.Preferences;
-import javax.swing.SwingUtilities;
 
 public class App {
     private static boolean darkMode = true; // Tema padrão: Dark
@@ -24,6 +25,8 @@ public class App {
         SwingUtilities.invokeLater(() -> {
             MainMDIFrame mainFrame = new MainMDIFrame();
             mainFrame.setVisible(true);
+            SlaveMDIFrame slaveMDIFrame = new SlaveMDIFrame();
+            slaveMDIFrame.start();
         });
     }
 
