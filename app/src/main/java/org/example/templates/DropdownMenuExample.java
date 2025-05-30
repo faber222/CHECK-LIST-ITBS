@@ -1,4 +1,4 @@
-package org.example;
+package org.example.templates;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

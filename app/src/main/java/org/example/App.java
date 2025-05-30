@@ -3,6 +3,8 @@
  */
 package org.example;
 
+import org.example.view.MainWindow;
+import org.example.templates.MainMDIFrame;
 import java.util.prefs.Preferences;
 
 import javax.swing.SwingUtilities;
@@ -23,9 +25,7 @@ public class App {
 
         // Cria e exibe a janela principal
         SwingUtilities.invokeLater(() -> {
-            MainMDIFrame mainFrame = new MainMDIFrame();
-            mainFrame.setVisible(true);
-            SlaveMDIFrame slaveMDIFrame = new SlaveMDIFrame();
+            MainWindow slaveMDIFrame = new MainWindow();
             slaveMDIFrame.start();
         });
     }
