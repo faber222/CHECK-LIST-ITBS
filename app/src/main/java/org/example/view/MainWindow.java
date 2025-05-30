@@ -19,6 +19,7 @@ import javax.swing.UIManager;
 
 import org.example.App;
 import org.example.controller.SidebarListener;
+import org.example.templates.ChecklistViewer;
 
 /**
  *
@@ -313,12 +314,12 @@ public class MainWindow extends JFrame implements SidebarListener {
     private void configurarBotoesArredondados() {
         // Lista de todos os botões do sidePanel
         JButton[] botoes = {
-                buttonRoteadores,
-                buttonAps,
-                buttonRadios,
-                buttonFibra,
-                buttonSwitch,
-                button5G,
+//                buttonRoteadores,
+//                buttonAps,
+//                buttonRadios,
+//                buttonFibra,
+//                buttonSwitch,
+//                button5G,
                 toggleSidebarButton
         };
 
@@ -343,7 +344,7 @@ public class MainWindow extends JFrame implements SidebarListener {
 
         if (isSidebarExpanded) {
             sidePanel.setPreferredSize(new Dimension(EXPANDED_WIDTH, getHeight()));
-            toggleSidebarButton.setText("◄");
+            toggleSidebarButton.setText("<");
             titulo.setVisible(true);
             jSeparator.setVisible(true);
             // Mostra todos os botões
@@ -354,7 +355,7 @@ public class MainWindow extends JFrame implements SidebarListener {
             }
         } else {
             sidePanel.setPreferredSize(new Dimension(COLLAPSED_WIDTH, getHeight()));
-            toggleSidebarButton.setText("►");
+            toggleSidebarButton.setText(">");
             titulo.setVisible(false);
             jSeparator.setVisible(false);
             // Esconde todos os botões exceto o toggle e version
@@ -467,10 +468,13 @@ public class MainWindow extends JFrame implements SidebarListener {
         }
 
         // Cria um novo painel de conteúdo
-        CheckListPanel pane = new CheckListPanel(); // ou ChecklistPanel futuramente
+//        CheckListPanel pane = new CheckListPanel(); 
+        
+        ChecklistViewer newPane = new ChecklistViewer(category);
 
         // Adiciona a nova aba
-        tabbedPane.addTab(category, pane);
+//        tabbedPane.addTab(category, pane);
+        tabbedPane.addTab(category, newPane);
 
         // Cria o painel com o título e botão de fechar
         JPanel aba = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -483,7 +487,8 @@ public class MainWindow extends JFrame implements SidebarListener {
         close.setBorderPainted(false);
         close.setMargin(new Insets(0, 5, 0, 5));
         close.addActionListener(e -> {
-            int index = tabbedPane.indexOfComponent(pane);
+//            int index = tabbedPane.indexOfComponent(pane);
+            int index = tabbedPane.indexOfComponent(newPane);
             if (index != -1) {
                 tabbedPane.remove(index);
             }
@@ -492,7 +497,9 @@ public class MainWindow extends JFrame implements SidebarListener {
         aba.add(label);
         aba.add(close);
 
-        tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(pane), aba);
-        tabbedPane.setSelectedComponent(pane);
+//        tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(pane), aba);
+        tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(newPane), aba);
+//        tabbedPane.setSelectedComponent(pane);
+        tabbedPane.setSelectedComponent(newPane);
     }
 }

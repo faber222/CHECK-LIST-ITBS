@@ -4,39 +4,21 @@
  */
 package org.example.templates;
 
-import java.awt.Dimension;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.swing.*;
+import java.awt.*;
+import java.util.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
-import com.formdev.flatlaf.FlatLightLaf;
-
-public class ChecklistViewer extends JFrame {
+public class ChecklistViewer extends JPanel {
 
     private final JList<String> checklistList;
-    private final JPanel checklistPanel;
+    private final JPanel checklistContentPanel;
     private final Map<String, java.util.List<ChecklistItem>> checklists;
 
-    public ChecklistViewer() {
-        super("Visualizador de Checklists");
+    public ChecklistViewer(String categoria) {
+        setLayout(new BorderLayout());
 
-        // Dados simulados de checklists
-        checklists = new LinkedHashMap<String, java.util.List<ChecklistItem>>();
+        // Simulação de dados (futuramente pode vir de JSON)
+        checklists = new LinkedHashMap<>();
         checklists.put("Instalação Roteador", Arrays.asList(
                 new ChecklistItem("Verificar alimentação", ChecklistType.CHECKBOX),
                 new ChecklistItem("SSID configurado", ChecklistType.CHECKBOX),
@@ -48,8 +30,8 @@ public class ChecklistViewer extends JFrame {
                 new ChecklistItem("Descrição do problema", ChecklistType.TEXTAREA)
         ));
 
-        // Lista de nomes dos checklists
-        checklistList = new JList<String>(checklists.keySet().toArray(new String[0]));
+        // Lista lateral de nomes dos checklists
+        checklistList = new JList<>(checklists.keySet().toArray(new String[0]));
         checklistList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         checklistList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
@@ -58,58 +40,47 @@ public class ChecklistViewer extends JFrame {
         });
 
         JScrollPane scrollList = new JScrollPane(checklistList);
-        scrollList.setBorder(BorderFactory.createTitledBorder("Checklists disponíveis"));
+        scrollList.setPreferredSize(new Dimension(200, 0));
+        scrollList.setBorder(BorderFactory.createTitledBorder("Modelos"));
 
-        // Painel da direita
-        checklistPanel = new JPanel();
-        checklistPanel.setLayout(new BoxLayout(checklistPanel, BoxLayout.Y_AXIS));
-        JScrollPane scrollChecklist = new JScrollPane(checklistPanel);
-        scrollChecklist.setBorder(BorderFactory.createTitledBorder("Itens do Checklist"));
+        // Painel da direita com os itens do checklist
+        checklistContentPanel = new JPanel();
+        checklistContentPanel.setLayout(new BoxLayout(checklistContentPanel, BoxLayout.Y_AXIS));
+        JScrollPane scrollContent = new JScrollPane(checklistContentPanel);
+        scrollContent.setBorder(BorderFactory.createTitledBorder("Itens"));
 
-        // JSplitPane com lista à esquerda e conteúdo à direita
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollList, scrollChecklist);
+        // Divide horizontalmente: lista à esquerda, conteúdo à direita
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollList, scrollContent);
         splitPane.setDividerLocation(200);
 
-        add(splitPane);
+        add(splitPane, BorderLayout.CENTER);
 
-        setSize(700, 500);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        checklistList.setSelectedIndex(0); // Seleciona o primeiro por padrão
+        checklistList.setSelectedIndex(0); // Seleciona o primeiro checklist por padrão
     }
 
     private void mostrarChecklist(String nomeChecklist) {
-        checklistPanel.removeAll();
+        checklistContentPanel.removeAll();
 
         java.util.List<ChecklistItem> itens = checklists.get(nomeChecklist);
         if (itens != null) {
             for (ChecklistItem item : itens) {
                 if (item.tipo == ChecklistType.CHECKBOX) {
-                    checklistPanel.add(new JCheckBox(item.nome));
+                    JCheckBox cb = new JCheckBox(item.nome);
+                    cb.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    checklistContentPanel.add(cb);
                 } else if (item.tipo == ChecklistType.TEXTAREA) {
-                    checklistPanel.add(new JLabel(item.nome + ":"));
-                    checklistPanel.add(new JScrollPane(new JTextArea(3, 40)));
+                    JLabel label = new JLabel(item.nome + ":");
+                    JTextArea area = new JTextArea(3, 40);
+                    checklistContentPanel.add(label);
+                    checklistContentPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+                    checklistContentPanel.add(new JScrollPane(area));
                 }
-                checklistPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+                checklistContentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
             }
         }
 
-        checklistPanel.revalidate();
-        checklistPanel.repaint();
-    }
-
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(new FlatLightLaf());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new ChecklistViewer().setVisible(true);
-            }
-        });
+        checklistContentPanel.revalidate();
+        checklistContentPanel.repaint();
     }
 
     private static class ChecklistItem {
