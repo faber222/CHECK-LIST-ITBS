@@ -44,13 +44,30 @@ public class ChecklistViewer extends JPanel {
         scrollList.setBorder(BorderFactory.createTitledBorder("Modelos"));
 
         // Painel da direita com os itens do checklist
+//        checklistContentPanel = new JPanel();
+//        checklistContentPanel.setLayout(new BoxLayout(checklistContentPanel, BoxLayout.Y_AXIS));
+//        JScrollPane scrollContent = new JScrollPane(checklistContentPanel);
+//        scrollContent.setBorder(BorderFactory.createTitledBorder("Itens"));
         checklistContentPanel = new JPanel();
         checklistContentPanel.setLayout(new BoxLayout(checklistContentPanel, BoxLayout.Y_AXIS));
+
+        // Envolve o conteúdo com botão
+        JPanel painelDireito = new JPanel(new BorderLayout());
         JScrollPane scrollContent = new JScrollPane(checklistContentPanel);
         scrollContent.setBorder(BorderFactory.createTitledBorder("Itens"));
+        painelDireito.add(scrollContent, BorderLayout.CENTER);
+
+        // Botão no canto inferior direito
+        JPanel painelBotao = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton btnSalvar = new JButton("Salvar Checklist");
+        painelBotao.add(btnSalvar);
+
+        painelDireito.add(painelBotao, BorderLayout.SOUTH);
+
 
         // Divide horizontalmente: lista à esquerda, conteúdo à direita
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollList, scrollContent);
+//        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollList, scrollContent);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollList, painelDireito);
         splitPane.setDividerLocation(200);
 
         add(splitPane, BorderLayout.CENTER);

@@ -73,12 +73,14 @@ public class MainWindow extends JFrame implements SidebarListener {
         buttonFibra = new javax.swing.JButton();
         buttonSwitch = new javax.swing.JButton();
         button5G = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
-        buttonTema = new javax.swing.JToggleButton();
         tabbedPane = new javax.swing.JTabbedPane();
         menuBar = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuSair = new javax.swing.JMenuItem();
+        menuEdit = new javax.swing.JMenu();
+        menuTema = new javax.swing.JMenuItem();
         menuHelp = new javax.swing.JMenu();
         menuCheckUpdate = new javax.swing.JMenuItem();
         menuSobre = new javax.swing.JMenuItem();
@@ -108,25 +110,31 @@ public class MainWindow extends JFrame implements SidebarListener {
 
         button5G.setText("Redes 5G");
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 3, 9)); // NOI18N
+        jLabel1.setText("checklist-intelbras-alpha-v0.0.2");
+
         javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
         sidePanelLayout.setHorizontalGroup(
             sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, sidePanelLayout.createSequentialGroup()
+            .addGroup(sidePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(button5G, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonSwitch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonRoteadores, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, sidePanelLayout.createSequentialGroup()
+                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(button5G, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonSwitch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonRoteadores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(sidePanelLayout.createSequentialGroup()
                         .addGap(0, 6, Short.MAX_VALUE)
                         .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(toggleSidebarButton))
-                    .addComponent(buttonAps, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonRadios, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonFibra, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(buttonAps, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonRadios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonFibra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(sidePanelLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         sidePanelLayout.setVerticalGroup(
@@ -152,35 +160,26 @@ public class MainWindow extends JFrame implements SidebarListener {
                 .addComponent(buttonSwitch, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(button5G, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(156, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addContainerGap())
         );
 
         contentPanel.setPreferredSize(new java.awt.Dimension(800, 0));
-
-        buttonTema.setText("Tema");
-        buttonTema.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonTemaActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
         contentPanelLayout.setHorizontalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contentPanelLayout.createSequentialGroup()
-                .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 725, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(buttonTema)
+            .addGroup(contentPanelLayout.createSequentialGroup()
+                .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 795, Short.MAX_VALUE)
                 .addContainerGap())
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contentPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(buttonTema)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(tabbedPane)
+                .addComponent(tabbedPane)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
@@ -209,6 +208,18 @@ public class MainWindow extends JFrame implements SidebarListener {
         menuFile.add(menuSair);
 
         menuBar.add(menuFile);
+
+        menuEdit.setText("Edit");
+
+        menuTema.setText("Tema");
+        menuTema.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuTemaActionPerformed(evt);
+            }
+        });
+        menuEdit.add(menuTema);
+
+        menuBar.add(menuEdit);
 
         menuHelp.setText("Ajuda");
 
@@ -240,6 +251,11 @@ public class MainWindow extends JFrame implements SidebarListener {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void menuTemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTemaActionPerformed
+        App.atualizarTemaGlobal(!App.isDarkMode());
+        atualizarUI();
+    }//GEN-LAST:event_menuTemaActionPerformed
 
     private void menuCheckUpdateActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuCheckUpdateActionPerformed
         // TODO add your handling code here:
@@ -422,16 +438,18 @@ public class MainWindow extends JFrame implements SidebarListener {
     private javax.swing.JButton buttonRadios;
     private javax.swing.JButton buttonRoteadores;
     private javax.swing.JButton buttonSwitch;
-    private javax.swing.JToggleButton buttonTema;
     private javax.swing.JPanel contentPanel;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JSeparator jSeparator;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuCheckUpdate;
+    private javax.swing.JMenu menuEdit;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuHelp;
     private javax.swing.JMenuItem menuSair;
     private javax.swing.JMenuItem menuSobre;
+    private javax.swing.JMenuItem menuTema;
     private javax.swing.JPanel sidePanel;
     private javax.swing.JTabbedPane tabbedPane;
     private javax.swing.JLabel titulo;
