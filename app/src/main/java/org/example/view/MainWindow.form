@@ -136,18 +136,18 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jSeparator" min="-2" pref="10" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="buttonRoteadores" min="-2" pref="29" max="-2" attributes="0"/>
+                      <Component id="buttonRoteadores" min="-2" pref="35" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                      <Component id="buttonAps" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="buttonAps" min="-2" pref="29" max="-2" attributes="0"/>
+                      <Component id="buttonRadios" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="buttonRadios" min="-2" pref="29" max="-2" attributes="0"/>
+                      <Component id="buttonFibra" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="buttonFibra" min="-2" pref="29" max="-2" attributes="0"/>
+                      <Component id="buttonSwitch" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="buttonSwitch" min="-2" pref="29" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="button5G" min="-2" pref="33" max="-2" attributes="0"/>
-                      <EmptySpace pref="188" max="32767" attributes="0"/>
+                      <Component id="button5G" min="-2" pref="35" max="-2" attributes="0"/>
+                      <EmptySpace pref="156" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -155,7 +155,7 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="toggleSidebarButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&#x25c4;"/>
+                <Property name="text" type="java.lang.String" value="&lt;"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="toggleSidebarButtonActionPerformed"/>
@@ -175,50 +175,31 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Roteadores"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonRoteadoresActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="buttonAps">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Wifi Empresarial"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonApsActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="buttonRadios">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Radios Outdoor"/>
               </Properties>
-              <Events>
-                <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="buttonRadiosAncestorAdded"/>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonRadiosActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="buttonFibra">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Fibra Optica"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonFibraActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="buttonSwitch">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Switchs"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonSwitchActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="button5G">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Redes 5G"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button5GActionPerformed"/>
-              </Events>
             </Component>
           </SubComponents>
         </Container>

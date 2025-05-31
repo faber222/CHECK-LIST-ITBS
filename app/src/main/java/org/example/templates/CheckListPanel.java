@@ -1,4 +1,4 @@
-package org.example.view;
+package org.example.templates;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license

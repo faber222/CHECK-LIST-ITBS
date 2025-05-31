@@ -3,6 +3,7 @@
  */
 package org.example;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
 import org.example.view.MainWindow;
 import org.example.templates.MainMDIFrame;
 import java.util.prefs.Preferences;
@@ -11,7 +12,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import java.awt.Color;
+import java.awt.Insets;
 
 public class App {
     private static boolean darkMode = true; // Tema padrão: Dark
@@ -37,10 +43,15 @@ public class App {
             Preferences prefs = Preferences.userNodeForPackage(App.class);
             prefs.putBoolean("DARK_MODE", darkMode);
             if (isDarkMode) {
-                UIManager.setLookAndFeel(new FlatDarkLaf());
+                UIManager.setLookAndFeel(new FlatMacDarkLaf());
             } else {
-                UIManager.setLookAndFeel(new FlatLightLaf());
+                UIManager.setLookAndFeel(new FlatMacLightLaf());
             }
+            UIManager.put( "ScrollBar.trackArc", 999 );
+            UIManager.put( "ScrollBar.thumbArc", 999 );
+            UIManager.put( "ScrollBar.trackInsets", new Insets( 2, 4, 2, 4 ) );
+            UIManager.put( "ScrollBar.thumbInsets", new Insets( 2, 2, 2, 2 ) );
+            UIManager.put( "ScrollBar.track", new Color( 0xe0e0e0 ) );
         } catch (Exception e) {
             e.printStackTrace();
         }
