@@ -14,12 +14,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import org.example.App;
 import org.example.controller.SidebarListener;
-import org.example.view.ChecklistViewer;
 
 /**
  *
@@ -42,6 +42,7 @@ public class MainWindow extends JFrame implements SidebarListener {
         buttonFibra.addActionListener(e -> onCategorySelected("Fibra Optica"));
         buttonSwitch.addActionListener(e -> onCategorySelected("Switchs"));
         button5G.addActionListener(e -> onCategorySelected("Redes 5G"));
+        sidePanel.setBackground(new Color(42, 152, 94));
 
         configurarBotoesArredondados();
     }
@@ -95,19 +96,30 @@ public class MainWindow extends JFrame implements SidebarListener {
             }
         });
 
-        titulo.setFont(new java.awt.Font("Utopia", 1, 13)); // NOI18N
-        titulo.setText("CHECK-LIST INTELBRAS");
+        titulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        //titulo.setForeground(new java.awt.Color(255, 255, 255));
+        // Texto com HTML: centralizado horizontalmente e com quebra de linha
+		titulo.setText("<html><center>CHECK-LIST<br>INTELBRAS</center></html>");
 
+		// Centraliza o JLabel no container (horizontalmente)
+		titulo.setHorizontalAlignment(SwingConstants.CENTER);
+
+        buttonRoteadores.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         buttonRoteadores.setText("Roteadores");
 
+        buttonAps.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         buttonAps.setText("Wifi Empresarial");
 
+        buttonRadios.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         buttonRadios.setText("Radios Outdoor");
 
+        buttonFibra.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         buttonFibra.setText("Fibra Optica");
 
+        buttonSwitch.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         buttonSwitch.setText("Switchs");
 
+        button5G.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         button5G.setText("Redes 5G");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 3, 9)); // NOI18N
@@ -125,11 +137,11 @@ public class MainWindow extends JFrame implements SidebarListener {
                     .addComponent(buttonRoteadores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(sidePanelLayout.createSequentialGroup()
-                        .addGap(0, 6, Short.MAX_VALUE)
-                        .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(toggleSidebarButton))
-                    .addComponent(buttonAps, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonAps, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
                     .addComponent(buttonRadios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(buttonFibra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(sidePanelLayout.createSequentialGroup()
@@ -141,12 +153,12 @@ public class MainWindow extends JFrame implements SidebarListener {
             sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(sidePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(toggleSidebarButton)
                     .addGroup(sidePanelLayout.createSequentialGroup()
                         .addGap(4, 4, 4)
-                        .addComponent(titulo, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(buttonRoteadores, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -160,7 +172,7 @@ public class MainWindow extends JFrame implements SidebarListener {
                 .addComponent(buttonSwitch, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(button5G, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addContainerGap())
         );
@@ -309,26 +321,58 @@ public class MainWindow extends JFrame implements SidebarListener {
     }// GEN-LAST:event_buttonTemaActionPerformed
 
     private void configurarBotoesArredondados() {
+		Color hoverColor = new Color(32, 122, 73); 
+
         // Lista de todos os botões do sidePanel
         JButton[] botoes = {
-//                buttonRoteadores,
-//                buttonAps,
-//                buttonRadios,
-//                buttonFibra,
-//                buttonSwitch,
-//                button5G,
+                buttonRoteadores,
+                buttonAps,
+                buttonRadios,
+                buttonFibra,
+                buttonSwitch,
+                button5G,
                 toggleSidebarButton
         };
 
+		for (JButton botao : botoes) {
+			botao.setContentAreaFilled(false); // Sem fundo padrão
+			botao.setOpaque(true); // Permite mudar o fundo depois
+			botao.setBackground(new Color(0, 0, 0, 0)); // Transparente
+			botao.setBorderPainted(false); // Sem borda
+			botao.setFocusPainted(false);  // Sem contorno ao clicar
+
+			botao.addMouseListener(new java.awt.event.MouseAdapter() {
+				@Override
+				public void mouseEntered(java.awt.event.MouseEvent evt) {
+					botao.setBackground(hoverColor);
+				}
+
+				@Override
+				public void mouseExited(java.awt.event.MouseEvent evt) {
+					botao.setBackground(new Color(0, 0, 0, 0)); // volta a ser transparente
+				}
+
+				@Override
+				public void mousePressed(java.awt.event.MouseEvent evt) {
+					botao.setBackground(hoverColor);
+				}
+
+				@Override
+				public void mouseReleased(java.awt.event.MouseEvent evt) {
+					botao.setBackground(hoverColor);
+				}
+			});
+		}
+		
         // Configura cada botão principal
         for (JButton botao : botoes) {
             if (botao != null) {
-                botao.putClientProperty("JButton.buttonType", "roundRect");
+                botao.putClientProperty("JButton.arc", 20); // raio de arredondamento
                 botao.setFocusPainted(false);
                 botao.setContentAreaFilled(true);
                 botao.setBorderPainted(false);
                 // botao.setBackground(new Color(70, 130, 180)); // Cor dos botões principais
-                // botao.setForeground(Color.WHITE);
+                botao.setForeground(Color.WHITE);
             }
         }
 
