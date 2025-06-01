@@ -7,6 +7,9 @@
         <Menu class="javax.swing.JMenu" name="menuFile">
           <Properties>
             <Property name="text" type="java.lang.String" value="File"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="SansSerif" size="13" style="0"/>
+            </Property>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuSair">
@@ -22,6 +25,9 @@
         <Menu class="javax.swing.JMenu" name="menuEdit">
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="SansSerif" size="13" style="0"/>
+            </Property>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuTema">
@@ -37,6 +43,9 @@
         <Menu class="javax.swing.JMenu" name="menuHelp">
           <Properties>
             <Property name="text" type="java.lang.String" value="Ajuda"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="SansSerif" size="13" style="0"/>
+            </Property>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuCheckUpdate">
@@ -99,14 +108,14 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="sidePanel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="contentPanel" pref="801" max="32767" attributes="0"/>
+                  <Component id="contentPanel" pref="919" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="sidePanel" max="32767" attributes="0"/>
-              <Component id="contentPanel" alignment="0" pref="531" max="32767" attributes="0"/>
+              <Component id="contentPanel" alignment="0" pref="586" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -129,7 +138,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="toggleSidebarButton" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="buttonAps" alignment="0" pref="201" max="32767" attributes="0"/>
+                          <Component id="buttonAps" alignment="0" max="32767" attributes="0"/>
                           <Component id="buttonRadios" alignment="0" max="32767" attributes="0"/>
                           <Component id="buttonFibra" alignment="0" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
@@ -153,8 +162,8 @@
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jSeparator" min="-2" pref="10" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jSeparator" min="-2" pref="16" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="buttonRoteadores" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Component id="buttonAps" min="-2" pref="35" max="-2" attributes="0"/>
@@ -166,7 +175,7 @@
                       <Component id="buttonSwitch" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="button5G" min="-2" pref="35" max="-2" attributes="0"/>
-                      <EmptySpace pref="121" max="32767" attributes="0"/>
+                      <EmptySpace pref="177" max="32767" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -184,13 +193,17 @@
             </Component>
             <Component class="javax.swing.JLabel" name="titulo">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="55" green="50" red="3e" type="rgb"/>
+                </Property>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Utopia" size="18" style="1"/>
+                  <Font name="SansSerif" size="18" style="1"/>
                 </Property>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="CHECK-LIST INTELBRAS"/>
+                <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="horizontalTextPosition" type="int" value="0"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JSeparator" name="jSeparator">
@@ -198,55 +211,61 @@
             <Component class="javax.swing.JButton" name="buttonRoteadores">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI" size="18" style="1"/>
+                  <Font name="SansSerif" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Roteadores"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="buttonAps">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI" size="18" style="1"/>
+                  <Font name="SansSerif" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Wifi Empresarial"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="buttonRadios">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI" size="18" style="1"/>
+                  <Font name="SansSerif" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Radios Outdoor"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="buttonFibra">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI" size="18" style="1"/>
+                  <Font name="SansSerif" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Fibra Optica"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="buttonSwitch">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI" size="18" style="1"/>
+                  <Font name="SansSerif" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Switchs"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="button5G">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI" size="18" style="1"/>
+                  <Font name="SansSerif" size="18" style="1"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Redes 5G"/>
+                <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Segoe UI" size="9" style="3"/>
+                  <Font name="SansSerif" size="9" style="3"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="checklist-intelbras-alpha-v0.0.2"/>
               </Properties>
@@ -264,7 +283,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="tabbedPane" pref="795" max="32767" attributes="0"/>
+                      <Component id="tabbedPane" pref="913" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
