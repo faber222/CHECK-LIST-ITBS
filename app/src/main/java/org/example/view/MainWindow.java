@@ -14,7 +14,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -42,7 +41,7 @@ public class MainWindow extends JFrame implements SidebarListener {
         buttonFibra.addActionListener(e -> onCategorySelected("Fibra Optica"));
         buttonSwitch.addActionListener(e -> onCategorySelected("Switchs"));
         button5G.addActionListener(e -> onCategorySelected("Redes 5G"));
-        sidePanel.setBackground(new Color(42, 152, 94));
+        sidePanel.setBackground(new Color(0, 163, 53));
 
         configurarBotoesArredondados();
     }
@@ -60,7 +59,14 @@ public class MainWindow extends JFrame implements SidebarListener {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
@@ -89,127 +95,148 @@ public class MainWindow extends JFrame implements SidebarListener {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CHECK-LIST-INTELBRAS");
 
+        titulo.setBackground(new java.awt.Color(62, 80, 85));
+
         toggleSidebarButton.setText("<");
         toggleSidebarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 toggleSidebarButtonActionPerformed(evt);
             }
         });
+        titulo.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        titulo.setText("<html><center>CHECK-LIST<br>INTELBRAS</center></html>");
+        titulo.setForeground(new java.awt.Color(255, 255, 255));
+        titulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        titulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        titulo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        //titulo.setForeground(new java.awt.Color(255, 255, 255));
-        // Texto com HTML: centralizado horizontalmente e com quebra de linha
-		titulo.setText("<html><center>CHECK-LIST<br>INTELBRAS</center></html>");
-
-		// Centraliza o JLabel no container (horizontalmente)
-		titulo.setHorizontalAlignment(SwingConstants.CENTER);
-
-        buttonRoteadores.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        buttonRoteadores.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         buttonRoteadores.setText("Roteadores");
+        buttonRoteadores.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
-        buttonAps.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        buttonAps.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         buttonAps.setText("Wifi Empresarial");
+        buttonAps.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
-        buttonRadios.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        buttonRadios.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         buttonRadios.setText("Radios Outdoor");
+        buttonRadios.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
-        buttonFibra.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        buttonFibra.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         buttonFibra.setText("Fibra Optica");
+        buttonFibra.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
-        buttonSwitch.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        buttonSwitch.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         buttonSwitch.setText("Switchs");
+        buttonSwitch.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
-        button5G.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        button5G.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         button5G.setText("Redes 5G");
+        button5G.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 3, 9)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("SansSerif", 3, 9)); // NOI18N
         jLabel1.setText("checklist-intelbras-alpha-v0.0.2");
 
         javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
         sidePanelLayout.setHorizontalGroup(
-            sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(sidePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(button5G, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonSwitch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonRoteadores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(sidePanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(toggleSidebarButton))
-                    .addComponent(buttonAps, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
-                    .addComponent(buttonRadios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonFibra, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(sidePanelLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
+                sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(sidePanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(button5G, javax.swing.GroupLayout.Alignment.TRAILING,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(buttonSwitch, javax.swing.GroupLayout.Alignment.TRAILING,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(buttonRoteadores, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jSeparator, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(sidePanelLayout.createSequentialGroup()
+                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 166,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(toggleSidebarButton))
+                                        .addComponent(buttonAps, javax.swing.GroupLayout.DEFAULT_SIZE, 201,
+                                                Short.MAX_VALUE)
+                                        .addComponent(buttonRadios, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(buttonFibra, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(sidePanelLayout.createSequentialGroup()
+                                                .addComponent(jLabel1)
+                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addContainerGap()));
         sidePanelLayout.setVerticalGroup(
-            sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(sidePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(toggleSidebarButton)
-                    .addGroup(sidePanelLayout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(buttonRoteadores, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(buttonAps, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(buttonRadios, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(buttonFibra, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(buttonSwitch, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(button5G, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addContainerGap())
-        );
+                sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(sidePanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(toggleSidebarButton)
+                                        .addGroup(sidePanelLayout.createSequentialGroup()
+                                                .addGap(4, 4, 4)
+                                                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 47,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 10,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(buttonRoteadores, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(buttonAps, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(buttonRadios, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(buttonFibra, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(buttonSwitch, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(button5G, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121,
+                                        Short.MAX_VALUE)
+                                .addComponent(jLabel1)
+                                .addContainerGap()));
 
         contentPanel.setPreferredSize(new java.awt.Dimension(800, 0));
 
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
         contentPanelLayout.setHorizontalGroup(
-            contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contentPanelLayout.createSequentialGroup()
-                .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 795, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+                contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(contentPanelLayout.createSequentialGroup()
+                                .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 795, Short.MAX_VALUE)
+                                .addContainerGap()));
         contentPanelLayout.setVerticalGroup(
-            contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contentPanelLayout.createSequentialGroup()
-                .addComponent(tabbedPane)
-                .addContainerGap())
-        );
+                contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(contentPanelLayout.createSequentialGroup()
+                                .addComponent(tabbedPane)
+                                .addContainerGap()));
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 801, Short.MAX_VALUE))
-        );
+                mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 801,
+                                        Short.MAX_VALUE)));
         mainPanelLayout.setVerticalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
-        );
+                mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE));
 
         menuFile.setText("File");
+        menuFile.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
 
         menuSair.setText("Sair");
         menuSair.addActionListener(new java.awt.event.ActionListener() {
@@ -222,6 +249,7 @@ public class MainWindow extends JFrame implements SidebarListener {
         menuBar.add(menuFile);
 
         menuEdit.setText("Edit");
+        menuEdit.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
 
         menuTema.setText("Tema");
         menuTema.addActionListener(new java.awt.event.ActionListener() {
@@ -234,6 +262,7 @@ public class MainWindow extends JFrame implements SidebarListener {
         menuBar.add(menuEdit);
 
         menuHelp.setText("Ajuda");
+        menuHelp.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
 
         menuCheckUpdate.setText("Verificar Sobre Atualizações");
         menuCheckUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -253,21 +282,21 @@ public class MainWindow extends JFrame implements SidebarListener {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void menuTemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuTemaActionPerformed
+    private void menuTemaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuTemaActionPerformed
         App.atualizarTemaGlobal(!App.isDarkMode());
         atualizarUI();
-    }//GEN-LAST:event_menuTemaActionPerformed
+    }// GEN-LAST:event_menuTemaActionPerformed
 
     private void menuCheckUpdateActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuCheckUpdateActionPerformed
         // TODO add your handling code here:
@@ -321,7 +350,7 @@ public class MainWindow extends JFrame implements SidebarListener {
     }// GEN-LAST:event_buttonTemaActionPerformed
 
     private void configurarBotoesArredondados() {
-		Color hoverColor = new Color(32, 122, 73); 
+        Color hoverColor = new Color(0, 122, 57);
 
         // Lista de todos os botões do sidePanel
         JButton[] botoes = {
@@ -334,36 +363,36 @@ public class MainWindow extends JFrame implements SidebarListener {
                 toggleSidebarButton
         };
 
-		for (JButton botao : botoes) {
-			botao.setContentAreaFilled(false); // Sem fundo padrão
-			botao.setOpaque(true); // Permite mudar o fundo depois
-			botao.setBackground(new Color(0, 0, 0, 0)); // Transparente
-			botao.setBorderPainted(false); // Sem borda
-			botao.setFocusPainted(false);  // Sem contorno ao clicar
+        for (JButton botao : botoes) {
+            botao.setContentAreaFilled(false); // Sem fundo padrão
+            botao.setOpaque(true); // Permite mudar o fundo depois
+            botao.setBackground(new Color(0, 0, 0, 0)); // Transparente
+            botao.setBorderPainted(true); // Sem borda
+            botao.setFocusPainted(false); // Sem contorno ao clicar
 
-			botao.addMouseListener(new java.awt.event.MouseAdapter() {
-				@Override
-				public void mouseEntered(java.awt.event.MouseEvent evt) {
-					botao.setBackground(hoverColor);
-				}
+            botao.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                    botao.setBackground(hoverColor);
+                }
 
-				@Override
-				public void mouseExited(java.awt.event.MouseEvent evt) {
-					botao.setBackground(new Color(0, 0, 0, 0)); // volta a ser transparente
-				}
+                @Override
+                public void mouseExited(java.awt.event.MouseEvent evt) {
+                    botao.setBackground(new Color(0, 0, 0, 0)); // volta a ser transparente
+                }
 
-				@Override
-				public void mousePressed(java.awt.event.MouseEvent evt) {
-					botao.setBackground(hoverColor);
-				}
+                @Override
+                public void mousePressed(java.awt.event.MouseEvent evt) {
+                    botao.setBackground(hoverColor);
+                }
 
-				@Override
-				public void mouseReleased(java.awt.event.MouseEvent evt) {
-					botao.setBackground(hoverColor);
-				}
-			});
-		}
-		
+                @Override
+                public void mouseReleased(java.awt.event.MouseEvent evt) {
+                    botao.setBackground(hoverColor);
+                }
+            });
+        }
+
         // Configura cada botão principal
         for (JButton botao : botoes) {
             if (botao != null) {
@@ -503,20 +532,20 @@ public class MainWindow extends JFrame implements SidebarListener {
     @Override
     public void onCategorySelected(String category) {
         // Verifica se a aba já existe
-//        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
-//            if (tabbedPane.getTitleAt(i).equals(category)) {
-//                tabbedPane.setSelectedIndex(i); // Seleciona a aba existente
-//                return;
-//            }
-//        }
+        // for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+        // if (tabbedPane.getTitleAt(i).equals(category)) {
+        // tabbedPane.setSelectedIndex(i); // Seleciona a aba existente
+        // return;
+        // }
+        // }
 
         // Cria um novo painel de conteúdo
-//        CheckListPanel pane = new CheckListPanel(); 
-        
+        // CheckListPanel pane = new CheckListPanel();
+
         ChecklistViewer newPane = new ChecklistViewer(category);
 
         // Adiciona a nova aba
-//        tabbedPane.addTab(category, pane);
+        // tabbedPane.addTab(category, pane);
         tabbedPane.addTab(category, newPane);
 
         // Cria o painel com o título e botão de fechar
@@ -530,7 +559,7 @@ public class MainWindow extends JFrame implements SidebarListener {
         close.setBorderPainted(false);
         close.setMargin(new Insets(0, 5, 0, 5));
         close.addActionListener(e -> {
-//            int index = tabbedPane.indexOfComponent(pane);
+            // int index = tabbedPane.indexOfComponent(pane);
             int index = tabbedPane.indexOfComponent(newPane);
             if (index != -1) {
                 tabbedPane.remove(index);
@@ -540,9 +569,9 @@ public class MainWindow extends JFrame implements SidebarListener {
         aba.add(label);
         aba.add(close);
 
-//        tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(pane), aba);
+        // tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(pane), aba);
         tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(newPane), aba);
-//        tabbedPane.setSelectedComponent(pane);
+        // tabbedPane.setSelectedComponent(pane);
         tabbedPane.setSelectedComponent(newPane);
     }
 }
