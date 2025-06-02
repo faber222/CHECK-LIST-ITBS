@@ -1,5 +1,6 @@
 package org.example.service;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,11 +15,20 @@ import org.example.model.ChecklistItens;
 
 public class LocalDatabaseService {
 
-    private static final String DB_URL = "jdbc:sqlite:db/dblocal.db";
+    private static final String DB_URL = "jdbc:sqlite:../db/dblocal.db";
 
     // Retorna uma nova conexão com o banco local
     private Connection conectar() throws SQLException {
-        return DriverManager.getConnection(DB_URL);
+        String dbPath = System.getProperty("user.dir") + "/db/dblocal.db";
+        System.out.println("Tentando conectar ao banco em: " + dbPath);
+
+        File dbFile = new File(dbPath);
+        if (!dbFile.exists()) {
+            throw new SQLException("Arquivo do banco de dados não encontrado em: " + dbPath);
+        }
+
+        return DriverManager.getConnection("jdbc:sqlite:" + dbPath);
+        // return DriverManager.getConnection(DB_URL);
     }
 
     // para botões laterais

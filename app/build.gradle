@@ -23,6 +23,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     implementation 'com.formdev:flatlaf:3.6'
+    implementation 'org.xerial:sqlite-jdbc:3.49.0.0' 
     // implementation("./src/main/libs/flatlaf-3.6.jar")
     // implementation fileTree(dir: './src/main/libs', include: ['flatlaf-3.6.jar'])
 
