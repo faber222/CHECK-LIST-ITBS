@@ -34,7 +34,7 @@ public class LocalDatabaseService {
     // para botões laterais
     public List<Categorias> listarCategorias() {
         List<Categorias> categorias = new ArrayList<>();
-        String sql = "SELECT id, nome FROM categorias ORDER BY nome ASC";
+        String sql = "SELECT id, nome FROM categorias ORDER BY id ASC";
 
         try (Connection conn = conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql);
