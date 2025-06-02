@@ -9,6 +9,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Insets;
 import java.util.List;
 
@@ -270,6 +271,23 @@ public class MainWindow extends JFrame implements SidebarListener {
     }// GEN-LAST:event_menuSobreActionPerformed
 
     private void menuSairActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSairActionPerformed
+        // Fechar todas as janelas/jframes abertos
+        for (Frame frame : Frame.getFrames()) {
+            if (frame.isDisplayable()) {
+                frame.dispose(); // Libera recursos da janela
+            }
+        }
+
+        // Forçar garbage collection
+        System.gc();
+        System.runFinalization();
+
+        // Aguardar um pouco para o GC trabalhar (opcional)
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         System.exit(0);
     }// GEN-LAST:event_menuSairActionPerformed
 
