@@ -1,0 +1,15 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package org.example.service;
+
+/**
+ *
+ * @author faber222
+ */
+public class DatabaseInitializer {
+    // TODO
+    // Responsável por verificar/executar a criação do banco e das tabelas.
+    // Pode usar File banco = new File("data/app.db"); para checar existência.
+}
