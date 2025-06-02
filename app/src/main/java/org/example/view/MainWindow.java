@@ -38,12 +38,14 @@ public class MainWindow extends JFrame implements SidebarListener {
     private final int COLLAPSED_WIDTH = 40;
     private final int EXPANDED_WIDTH = 213;
     private JPanel buttonsPanel; // Novo painel para botões dinâmicos
+    private final LocalDatabaseService dbService;
 
     /**
      * Creates new form SlaveMDIFrame
      */
     public MainWindow() {
         initComponents();
+        dbService = new LocalDatabaseService();
         sidePanel.setBackground(new Color(0, 163, 53));
 
         configurarBotoesArredondados();
@@ -276,7 +278,7 @@ public class MainWindow extends JFrame implements SidebarListener {
 
         // Lista de todos os botões do sidePanel
         JButton[] botoes = {
-            toggleSidebarButton,
+                toggleSidebarButton,
         };
 
         for (JButton botao : botoes) {
@@ -426,7 +428,6 @@ public class MainWindow extends JFrame implements SidebarListener {
     private void loadCategoryButtons() {
         buttonsPanel.removeAll();
 
-        LocalDatabaseService dbService = new LocalDatabaseService();
         List<Categorias> categorias = dbService.listarCategorias();
 
         for (Categorias categoria : categorias) {
@@ -496,7 +497,7 @@ public class MainWindow extends JFrame implements SidebarListener {
 
     @Override
     public void onCategorySelected(Categorias category) {
-        ChecklistViewer newPane = new ChecklistViewer(category);
+        ChecklistViewer newPane = new ChecklistViewer(category, dbService);
 
         // Adiciona a nova aba
         // tabbedPane.addTab(category, pane);

@@ -83,7 +83,7 @@ public class LocalDatabaseService {
     // para montar o conteúdo do JCheckBoxes
     public List<ChecklistItens> listarItensPorChecklist(int checklistId) {
         List<ChecklistItens> itens = new ArrayList<>();
-        String sql = "SELECT id, checklist_id, texto, ordem FROM ChecklistItens WHERE checklist_id = ? ORDER BY ordem ASC";
+        String sql = "SELECT id, checklist_id, texto, ordem FROM checklist_itens WHERE checklist_id = ? ORDER BY ordem ASC";
 
         try (Connection conn = conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {

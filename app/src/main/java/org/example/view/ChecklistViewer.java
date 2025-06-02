@@ -9,8 +9,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -31,26 +32,53 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.example.model.Categorias;
+import org.example.model.Checklist;
+import org.example.model.ChecklistItens;
+import org.example.service.LocalDatabaseService;
 
 public class ChecklistViewer extends JPanel {
 
     private final JList<String> checklistList;
     private final JPanel checklistContentPanel;
-    private final Map<String, java.util.List<ChecklistItem>> checklists;
+    private final Map<String, List<ChecklistItem>> checklists;
 
-    public ChecklistViewer(Categorias categoria) {
+    public ChecklistViewer(Categorias categoria, LocalDatabaseService dbService) {
+        // Checklist mainChecklist = new Checklist();
+        // ChecklistItens boxChecklistItens = new ChecklistItens();
         setLayout(new BorderLayout());
 
-        // Simulação de dados (futuramente pode vir de JSON)
         checklists = new LinkedHashMap<>();
-        checklists.put("Instalação Roteador", Arrays.asList(
-                new ChecklistItem("Verificar alimentação", ChecklistType.CHECKBOX),
-                new ChecklistItem("SSID configurado", ChecklistType.CHECKBOX),
-                new ChecklistItem("Observações", ChecklistType.TEXTAREA)));
-        checklists.put("Diagnóstico Wi-Fi", Arrays.asList(
-                new ChecklistItem("Teste de velocidade", ChecklistType.CHECKBOX),
-                new ChecklistItem("Cliente conectado?", ChecklistType.CHECKBOX),
-                new ChecklistItem("Descrição do problema", ChecklistType.TEXTAREA)));
+        List<Checklist> checklistsData = dbService.listarChecklistsPorCategoria(categoria.getId());
+        // List<ChecklistItens> checklistItensData = new ArrayList<>();
+        // Simulação de dados (futuramente pode vir de JSON)
+
+        // for (Checklist elem : checklistsData) {
+        // checklistItensData = dbService.listarItensPorChecklist(elem.getId());
+        // }
+
+        for (Checklist checklist : checklistsData) {
+            List<ChecklistItens> itens = dbService.listarItensPorChecklist(checklist.getId());
+            List<ChecklistItem> checklistItems = new ArrayList<>();
+
+            for (ChecklistItens item : itens) {
+                checklistItems.add(new ChecklistItem(
+                        item.getTexto(),
+                        ChecklistType.CHECKBOX));
+            }
+            checklistItems.add(new ChecklistItem(
+                    "Observações",
+                    ChecklistType.TEXTAREA));
+            checklists.put(checklist.getTitulo(), checklistItems);
+        }
+
+        // checklists.put("Instalação Roteador", Arrays.asList(
+        // new ChecklistItem("Verificar alimentação", ChecklistType.CHECKBOX),
+        // new ChecklistItem("SSID configurado", ChecklistType.CHECKBOX),
+        // new ChecklistItem("Observações", ChecklistType.TEXTAREA)));
+        // checklists.put("Diagnóstico Wi-Fi", Arrays.asList(
+        // new ChecklistItem("Teste de velocidade", ChecklistType.CHECKBOX),
+        // new ChecklistItem("Cliente conectado?", ChecklistType.CHECKBOX),
+        // new ChecklistItem("Descrição do problema", ChecklistType.TEXTAREA)));
 
         // Lista lateral de nomes dos checkBoxes
         checklistList = new JList<>(checklists.keySet().toArray(new String[0]));
@@ -73,7 +101,7 @@ public class ChecklistViewer extends JPanel {
 
                 if (houveAlteracoes()) {
                     int resposta = JOptionPane.showConfirmDialog(
-                            null, 
+                            null,
                             "Você fez alterações no checklist atual.\nSe continuar, perderá os dados não salvos.\nDeseja continuar?",
                             "Atenção",
                             JOptionPane.YES_NO_OPTION,
@@ -88,8 +116,6 @@ public class ChecklistViewer extends JPanel {
                         return;
                     }
                 }
-
-
 
                 mostrarChecklist(novoChecklist);
                 indiceAnterior = novoIndice;
