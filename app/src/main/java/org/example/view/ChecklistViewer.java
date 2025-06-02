@@ -30,13 +30,15 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.example.model.Categorias;
+
 public class ChecklistViewer extends JPanel {
 
     private final JList<String> checklistList;
     private final JPanel checklistContentPanel;
     private final Map<String, java.util.List<ChecklistItem>> checklists;
 
-    public ChecklistViewer(String categoria) {
+    public ChecklistViewer(Categorias categoria) {
         setLayout(new BorderLayout());
 
         // Simulação de dados (futuramente pode vir de JSON)
