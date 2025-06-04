@@ -120,14 +120,16 @@ public class MainWindow extends JFrame implements SidebarListener {
         buttonsPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
         buttonsScrollPane = new JScrollPane(buttonsPanel);
-        buttonsScrollPane.setBorder(null); // Bom para remover a borda padrão
+        buttonsScrollPane.getVerticalScrollBar().setName("sidebarScrollBar");
+        buttonsScrollPane.setBorder(null);
         buttonsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         buttonsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        buttonsScrollPane.setOpaque(false); // Isso torna o JScrollPane em si transparente
+        buttonsScrollPane.getViewport().setOpaque(false); // Tenta herdar do JScrollPane
+        buttonsScrollPane.setOpaque(false); // Tenta herdar do sidePanel (que é verde)
         buttonsScrollPane.setPreferredSize(new Dimension(EXPANDED_WIDTH - 20, 400));
         buttonsScrollPane.setMaximumSize(new Dimension(EXPANDED_WIDTH - 20, Integer.MAX_VALUE));
-        buttonsScrollPane.setBorder(BorderFactory.createEmptyBorder()); // Outra forma de remover a borda
-        buttonsScrollPane.setViewportBorder(null); // Força transparência da borda do viewport
+        buttonsScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        buttonsScrollPane.setViewportBorder(null);
 
         // buttonsScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
 
