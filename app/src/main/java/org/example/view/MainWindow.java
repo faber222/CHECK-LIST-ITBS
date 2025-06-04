@@ -4,7 +4,6 @@
  */
 package org.example.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -121,15 +120,16 @@ public class MainWindow extends JFrame implements SidebarListener {
         buttonsPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 
         buttonsScrollPane = new JScrollPane(buttonsPanel);
-        buttonsScrollPane.setBorder(null);
+        buttonsScrollPane.setBorder(null); // Bom para remover a borda padrão
         buttonsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         buttonsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        buttonsScrollPane.getViewport().setOpaque(false);
-        buttonsScrollPane.setOpaque(false);
+        buttonsScrollPane.setOpaque(false); // Isso torna o JScrollPane em si transparente
         buttonsScrollPane.setPreferredSize(new Dimension(EXPANDED_WIDTH - 20, 400));
         buttonsScrollPane.setMaximumSize(new Dimension(EXPANDED_WIDTH - 20, Integer.MAX_VALUE));
-        buttonsScrollPane.setBorder(BorderFactory.createEmptyBorder());
-        buttonsScrollPane.setViewportBorder(null); // força transparência da borda
+        buttonsScrollPane.setBorder(BorderFactory.createEmptyBorder()); // Outra forma de remover a borda
+        buttonsScrollPane.setViewportBorder(null); // Força transparência da borda do viewport
+
+        // buttonsScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 3, 9)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -176,9 +176,6 @@ public class MainWindow extends JFrame implements SidebarListener {
                                         Short.MAX_VALUE)
                                 .addComponent(jLabel1)
                                 .addContainerGap()));
-
-        sidePanel.add(buttonsScrollPane, BorderLayout.CENTER);
-        sidePanel.add(jLabel1, BorderLayout.SOUTH);
 
         contentPanel.setPreferredSize(new java.awt.Dimension(800, 0));
 
@@ -274,31 +271,17 @@ public class MainWindow extends JFrame implements SidebarListener {
         mainPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
-                ajustarScrollPane();
+                performLayoutAdjustments();
             }
 
             @Override
             public void componentShown(java.awt.event.ComponentEvent e) {
-                ajustarScrollPane();
+                performLayoutAdjustments();
             }
 
             @Override
             public void componentMoved(java.awt.event.ComponentEvent e) {
-                ajustarScrollPane();
-            }
-
-            private void ajustarScrollPane() {
-                int alturaDisponivel = mainPanel.getHeight()
-                        - titulo.getPreferredSize().height
-                        - toggleSidebarButton.getPreferredSize().height
-                        - jSeparator.getPreferredSize().height
-                        - jLabel1.getPreferredSize().height
-                        - 60; // margem de segurança
-
-                buttonsScrollPane.setMaximumSize(new Dimension(EXPANDED_WIDTH, alturaDisponivel));
-                buttonsScrollPane.setPreferredSize(new Dimension(EXPANDED_WIDTH, alturaDisponivel));
-                buttonsScrollPane.revalidate();
-                buttonsScrollPane.repaint();
+                performLayoutAdjustments();
             }
         });
 
@@ -316,6 +299,106 @@ public class MainWindow extends JFrame implements SidebarListener {
     private void menuSobreActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSobreActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_menuSobreActionPerformed
+
+    private void performLayoutAdjustments() {
+        // Adicionado para evitar NullPointerException se chamado muito cedo
+        if (mainPanel == null || sidePanel == null || titulo == null || jSeparator == null || jLabel1 == null
+                || buttonsScrollPane == null) {
+            return;
+        }
+
+        final int currentScrollPaneWidth;
+        final int targetScrollPaneHeight;
+
+        if (isSidebarExpanded) {
+            // Calcula a altura disponível para o buttonsScrollPane quando a sidebar está
+            // expandida
+            int alturaTituloRow = 0;
+            if (titulo.isVisible()) {
+                // A altura da linha do título é aproximadamente a altura preferida do
+                // componente 'titulo'
+                alturaTituloRow = titulo.getPreferredSize().height;
+            }
+
+            int alturaSeparador = 0;
+            if (jSeparator.isVisible()) {
+                alturaSeparador = jSeparator.getPreferredSize().height;
+            }
+
+            int alturaLabelVersao = 0;
+            if (jLabel1.isVisible()) {
+                alturaLabelVersao = jLabel1.getPreferredSize().height;
+            }
+
+            // Sua "margem de segurança" para cobrir os espaçamentos verticais do
+            // GroupLayout
+            int MARGEM_SEGURANCA_GAPS = 60;
+
+            int alturaPainelLateral = sidePanel.getHeight();
+            // Fallback se sidePanel.getHeight() ainda for 0 (acontece no início)
+            if (alturaPainelLateral <= 0) {
+                alturaPainelLateral = mainPanel.getHeight();
+            }
+
+            int alturaCalculada = alturaPainelLateral
+                    - alturaTituloRow
+                    - alturaSeparador
+                    - alturaLabelVersao
+                    - MARGEM_SEGURANCA_GAPS;
+
+            targetScrollPaneHeight = Math.max(0, alturaCalculada); // Garante que não seja negativo
+
+            // A largura do conteúdo do JScrollPane
+            currentScrollPaneWidth = EXPANDED_WIDTH - 20; // Como definido na inicialização do JScrollPane
+
+        } else { // Sidebar está recolhida
+            // Quando recolhida, o buttonsPanel (conteúdo) está invisível.
+            // O JScrollPane em si pode ter uma largura mínima.
+            currentScrollPaneWidth = Math.max(0, COLLAPSED_WIDTH - 10); // Largura mínima
+
+            // A altura pode continuar sendo calculada ou definida para a altura total do
+            // sidePanel,
+            // já que o conteúdo (buttonsPanel) está invisível.
+            // Manter o cálculo similar ao expandido, mas com largura recolhida.
+            int alturaTituloRow = 0; // titulo não está visível
+            int alturaSeparador = 0; // jSeparator não está visível
+
+            int alturaLabelVersao = 0;
+            if (jLabel1.isVisible()) { // jLabel1 (versão) pode ainda estar visível
+                alturaLabelVersao = jLabel1.getPreferredSize().height;
+            }
+            int MARGEM_SEGURANCA_GAPS = 60; // Manter uma margem
+            int alturaPainelLateral = sidePanel.getHeight();
+            if (alturaPainelLateral <= 0) {
+                alturaPainelLateral = mainPanel.getHeight();
+            }
+            // No modo recolhido, os elementos acima do buttonsScrollPane (titulo,
+            // jseparator) estão invisíveis.
+            // buttonsPanel também está invisível.
+            // Então, o buttonsScrollPane pode ocupar a altura disponível menos o jLabel1 e
+            // margens.
+            targetScrollPaneHeight = Math.max(0, alturaPainelLateral - alturaLabelVersao - MARGEM_SEGURANCA_GAPS);
+        }
+
+        final Dimension preferred = new Dimension(currentScrollPaneWidth, targetScrollPaneHeight);
+        final Dimension maximum = new Dimension(currentScrollPaneWidth, targetScrollPaneHeight);
+
+        // Agendar a atualização para o final da fila de eventos do Swing
+        // Isso pode ajudar com instabilidades durante redimensionamentos rápidos
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (buttonsScrollPane == null || sidePanel == null)
+                    return; // Check again
+
+                buttonsScrollPane.setPreferredSize(preferred);
+                buttonsScrollPane.setMaximumSize(maximum);
+
+                sidePanel.revalidate();
+                sidePanel.repaint();
+            }
+        });
+    }
 
     private void menuSairActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSairActionPerformed
         // Fechar todas as janelas/jframes abertos
@@ -422,12 +505,12 @@ public class MainWindow extends JFrame implements SidebarListener {
 
         }
 
-        // Reposiciona o toggle button no canto superior direito
-        toggleSidebarButton.setBounds(
-                isSidebarExpanded ? EXPANDED_WIDTH - 30 : COLLAPSED_WIDTH - 30,
-                10,
-                30,
-                30);
+        // // Reposiciona o toggle button no canto superior direito
+        // toggleSidebarButton.setBounds(
+        // isSidebarExpanded ? EXPANDED_WIDTH - 30 : COLLAPSED_WIDTH - 30,
+        // 10,
+        // 30,
+        // 30);
 
         sidePanel.revalidate();
         sidePanel.repaint();
@@ -469,8 +552,6 @@ public class MainWindow extends JFrame implements SidebarListener {
         // }
         // </editor-fold>
 
-        /* Create and display the form */
-        // FlatDarkLaf.setup(); // Tema escuro
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 new MainWindow().setVisible(true);
@@ -479,35 +560,14 @@ public class MainWindow extends JFrame implements SidebarListener {
     }
 
     public void start() {
-        // new MainWindow().setVisible(true);
         loadCategoryButtons(); // Carrega botões ao iniciar
         setVisible(true);
-        iniciarMonitorDeRedimensionamento();
-    }
-
-    private void iniciarMonitorDeRedimensionamento() {
-        final int delay = 200; // Verificação a cada 200ms
-        final Dimension[] ultimoTamanho = { mainPanel.getSize() };
-
-        new javax.swing.Timer(delay, e -> {
-            Dimension atual = mainPanel.getSize();
-            if (!atual.equals(ultimoTamanho[0])) {
-                ultimoTamanho[0] = atual;
-
-                int alturaDisponivel = atual.height
-                        - titulo.getPreferredSize().height
-                        - toggleSidebarButton.getPreferredSize().height
-                        - jSeparator.getPreferredSize().height
-                        - jLabel1.getPreferredSize().height
-                        - 60; // margem de segurança
-
-                buttonsScrollPane.setPreferredSize(new Dimension(EXPANDED_WIDTH, alturaDisponivel));
-                buttonsScrollPane.setMaximumSize(new Dimension(EXPANDED_WIDTH, alturaDisponivel));
-                buttonsScrollPane.revalidate();
-                buttonsScrollPane.repaint();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                performLayoutAdjustments();
             }
-        }).start();
-    }    
+        });
+    }
 
     // Método para atualizar todos os componentes
     private void atualizarUI() {
@@ -523,7 +583,7 @@ public class MainWindow extends JFrame implements SidebarListener {
         for (Categorias categoria : categorias) {
             JButton btn = createCategoryButton(categoria);
             buttonsPanel.add(btn);
-            buttonsPanel.add(Box.createRigidArea(new Dimension(0, 18))); // Espaçamento vertical
+            buttonsPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Espaçamento vertical
         }
 
         buttonsPanel.revalidate();
@@ -545,7 +605,7 @@ public class MainWindow extends JFrame implements SidebarListener {
         });
 
         // Estilização
-        button.putClientProperty("JButton.arc", 20);
+        button.putClientProperty("JButton.arc", 10);
         button.setFocusPainted(false);
         button.setContentAreaFilled(true);
         button.setBorderPainted(false);
