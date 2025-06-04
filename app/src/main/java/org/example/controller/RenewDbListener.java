@@ -1,5 +1,5 @@
 package org.example.controller;
 
-public interface UpdateFrameListener {
+public interface RenewDbListener {
     void onProfileCreated(String ipAddress);
 }
