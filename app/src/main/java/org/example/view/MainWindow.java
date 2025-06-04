@@ -26,8 +26,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import org.example.App;
+import org.example.controller.RenewDbListener;
 import org.example.controller.SidebarListener;
-import org.example.controller.UpdateFrameListener;
 import org.example.model.Categorias;
 import org.example.service.LocalDatabaseService;
 
@@ -35,33 +35,149 @@ import org.example.service.LocalDatabaseService;
  *
  * @author faber222
  */
-public class MainWindow extends JFrame implements SidebarListener , UpdateFrameListener {
+public class MainWindow extends JFrame implements SidebarListener , RenewDbListener {
 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(final String args[]) {
+        /* Set the Nimbus look and feel */
+        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
+        // (optional) ">
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
+         * look and feel.
+         * For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         */
+        // try {
+        // for (javax.swing.UIManager.LookAndFeelInfo info :
+        // javax.swing.UIManager.getInstalledLookAndFeels()) {
+        // if ("Nimbus".equals(info.getName())) {
+        // javax.swing.UIManager.setLookAndFeel(info.getClassName());
+        // break;
+        // }
+        // }
+        // } catch (ClassNotFoundException ex) {
+        // java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE,
+        // null, ex);
+        // } catch (InstantiationException ex) {
+        // java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE,
+        // null, ex);
+        // } catch (IllegalAccessException ex) {
+        // java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE,
+        // null, ex);
+        // } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        // java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE,
+        // null, ex);
+        // }
+        // </editor-fold>
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new MainWindow().setVisible(true);
+            }
+        });
+    }
     private boolean isSidebarExpanded = true;
     private final int COLLAPSED_WIDTH = 40;
     private final int EXPANDED_WIDTH = 213;
     private JPanel buttonsPanel; // Novo painel para botões dinâmicos
     private final LocalDatabaseService dbService;
     private JScrollPane buttonsScrollPane;
-    private UpdateFrame updateFrame;
+    private final RenewDb updateFrame;
+
     private String ipAddress;
 
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel contentPanel;
+
+    private javax.swing.JLabel jLabel1;
+
+    private javax.swing.JSeparator jSeparator;
+
+    private javax.swing.JPanel mainPanel;
+
+    private javax.swing.JMenuBar menuBar;
+
+    private javax.swing.JMenuItem menuCheckUpdate;
+
+    private javax.swing.JMenu menuEdit;
+
+    private javax.swing.JMenu menuFile;
+
+    private javax.swing.JMenu menuHelp;
+
+    private javax.swing.JMenuItem menuSair;
+
+    private javax.swing.JMenuItem menuSobre;
+
+    private javax.swing.JMenuItem menuTema;
+
+    private javax.swing.JPanel sidePanel;
+
+    private javax.swing.JTabbedPane tabbedPane;
+
+    private javax.swing.JLabel titulo;
+    private javax.swing.JButton toggleSidebarButton;
+    // End of variables declaration//GEN-END:variables
     /**
      * Creates new form SlaveMDIFrame
      */
     public MainWindow() {
-        updateFrame = new UpdateFrame();
+        updateFrame = new RenewDb();
         initComponents();
         dbService = new LocalDatabaseService();
         sidePanel.setBackground(new Color(0, 163, 53));
 
         configurarBotoesArredondados();
     }
-
-    public void onProfileCreated(String ipAddress) {
+    public void onProfileCreated(final String ipAddress) {
         this.ipAddress = ipAddress;
     }
+    public void start() {
+        loadCategoryButtons(); // Carrega botões ao iniciar
+        setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                performLayoutAdjustments();
+            }
+        });
+    }
+    @Override
+    public void onCategorySelected(final Categorias category) {
+        final ChecklistViewer newPane = new ChecklistViewer(category, dbService);
 
+        // Adiciona a nova aba
+        // tabbedPane.addTab(category, pane);
+        tabbedPane.addTab(category.getNome(), newPane);
+
+        // Cria o painel com o título e botão de fechar
+        final JPanel aba = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        aba.setOpaque(false);
+
+        final JLabel label = new JLabel(category.getNome());
+        final JButton close = new JButton("x");
+        close.setForeground(Color.RED);
+        close.setContentAreaFilled(false);
+        close.setBorderPainted(false);
+        close.setMargin(new Insets(0, 5, 0, 5));
+        close.addActionListener(e -> {
+            // int index = tabbedPane.indexOfComponent(pane);
+            final int index = tabbedPane.indexOfComponent(newPane);
+            if (index != -1) {
+                tabbedPane.remove(index);
+            }
+        });
+
+        aba.add(label);
+        aba.add(close);
+
+        // tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(pane), aba);
+        tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(newPane), aba);
+        // tabbedPane.setSelectedComponent(pane);
+        tabbedPane.setSelectedComponent(newPane);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -110,7 +226,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
         toggleSidebarButton.setText("<");
         toggleSidebarButton.addActionListener(new java.awt.event.ActionListener() {
             @SuppressWarnings("override")
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 toggleSidebarButtonActionPerformed(evt);
             }
         });
@@ -145,7 +261,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("checklist-intelbras-alpha-v0.0.2");
 
-        javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
+        final javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
         sidePanelLayout.setHorizontalGroup(
                 sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,7 +305,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
 
         contentPanel.setPreferredSize(new java.awt.Dimension(800, 0));
 
-        javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
+        final javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
         contentPanelLayout.setHorizontalGroup(
                 contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -202,7 +318,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
                                 .addComponent(tabbedPane)
                                 .addContainerGap()));
 
-        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        final javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
                 mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,7 +339,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
 
         menuSair.setText("Sair");
         menuSair.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 menuSairActionPerformed(evt);
             }
         });
@@ -236,7 +352,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
 
         menuTema.setText("Tema");
         menuTema.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 menuTemaActionPerformed(evt);
             }
         });
@@ -249,7 +365,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
 
         menuCheckUpdate.setText("Verificar Sobre Atualizações");
         menuCheckUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 menuCheckUpdateActionPerformed(evt);
             }
         });
@@ -257,7 +373,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
 
         menuSobre.setText("Sobre");
         menuSobre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 menuSobreActionPerformed(evt);
             }
         });
@@ -267,7 +383,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
 
         setJMenuBar(menuBar);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,37 +396,33 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
         pack();
         mainPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
-            public void componentResized(java.awt.event.ComponentEvent e) {
+            public void componentResized(final java.awt.event.ComponentEvent e) {
                 performLayoutAdjustments();
             }
 
             @Override
-            public void componentShown(java.awt.event.ComponentEvent e) {
+            public void componentShown(final java.awt.event.ComponentEvent e) {
                 performLayoutAdjustments();
             }
 
             @Override
-            public void componentMoved(java.awt.event.ComponentEvent e) {
+            public void componentMoved(final java.awt.event.ComponentEvent e) {
                 performLayoutAdjustments();
             }
         });
 
     }// </editor-fold>//GEN-END:initComponents
-
-    private void menuTemaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuTemaActionPerformed
+    private void menuTemaActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuTemaActionPerformed
         App.atualizarTemaGlobal(!App.isDarkMode());
         atualizarUI();
     }// GEN-LAST:event_menuTemaActionPerformed
-
-    private void menuCheckUpdateActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuCheckUpdateActionPerformed
+    private void menuCheckUpdateActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuCheckUpdateActionPerformed
         updateFrame.setListener(this);
         updateFrame.setVisible(true);
     }// GEN-LAST:event_menuCheckUpdateActionPerformed
-
-    private void menuSobreActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSobreActionPerformed
+    private void menuSobreActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSobreActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_menuSobreActionPerformed
-
     private void performLayoutAdjustments() {
         // Adicionado para evitar NullPointerException se chamado muito cedo
         if (mainPanel == null || sidePanel == null || titulo == null || jSeparator == null || jLabel1 == null
@@ -343,7 +455,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
 
             // Sua "margem de segurança" para cobrir os espaçamentos verticais do
             // GroupLayout
-            int MARGEM_SEGURANCA_GAPS = 60;
+            final int MARGEM_SEGURANCA_GAPS = 60;
 
             int alturaPainelLateral = sidePanel.getHeight();
             // Fallback se sidePanel.getHeight() ainda for 0 (acontece no início)
@@ -351,7 +463,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
                 alturaPainelLateral = mainPanel.getHeight();
             }
 
-            int alturaCalculada = alturaPainelLateral
+            final int alturaCalculada = alturaPainelLateral
                     - alturaTituloRow
                     - alturaSeparador
                     - alturaLabelVersao
@@ -371,14 +483,14 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
             // sidePanel,
             // já que o conteúdo (buttonsPanel) está invisível.
             // Manter o cálculo similar ao expandido, mas com largura recolhida.
-            int alturaTituloRow = 0; // titulo não está visível
-            int alturaSeparador = 0; // jSeparator não está visível
+            final int alturaTituloRow = 0; // titulo não está visível
+            final int alturaSeparador = 0; // jSeparator não está visível
 
             int alturaLabelVersao = 0;
             if (jLabel1.isVisible()) { // jLabel1 (versão) pode ainda estar visível
                 alturaLabelVersao = jLabel1.getPreferredSize().height;
             }
-            int MARGEM_SEGURANCA_GAPS = 60; // Manter uma margem
+            final int MARGEM_SEGURANCA_GAPS = 60; // Manter uma margem
             int alturaPainelLateral = sidePanel.getHeight();
             if (alturaPainelLateral <= 0) {
                 alturaPainelLateral = mainPanel.getHeight();
@@ -410,10 +522,9 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
             }
         });
     }
-
-    private void menuSairActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSairActionPerformed
+    private void menuSairActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSairActionPerformed
         // Fechar todas as janelas/jframes abertos
-        for (Frame frame : Frame.getFrames()) {
+        for (final Frame frame : Frame.getFrames()) {
             if (frame.isDisplayable()) {
                 frame.dispose(); // Libera recursos da janela
             }
@@ -426,21 +537,20 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
         // Aguardar um pouco para o GC trabalhar (opcional)
         try {
             Thread.sleep(500);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             Thread.currentThread().interrupt();
         }
         System.exit(0);
     }// GEN-LAST:event_menuSairActionPerformed
-
     private void configurarBotoesArredondados() {
-        Color hoverColor = new Color(0, 122, 57);
+        final Color hoverColor = new Color(0, 122, 57);
 
         // Lista de todos os botões do sidePanel
-        JButton[] botoes = {
+        final JButton[] botoes = {
                 toggleSidebarButton,
         };
 
-        for (JButton botao : botoes) {
+        for (final JButton botao : botoes) {
             botao.setContentAreaFilled(false); // Sem fundo padrão
             botao.setOpaque(true); // Permite mudar o fundo depois
             botao.setBackground(new Color(0, 0, 0, 0)); // Transparente
@@ -449,29 +559,29 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
 
             botao.addMouseListener(new java.awt.event.MouseAdapter() {
                 @Override
-                public void mouseEntered(java.awt.event.MouseEvent evt) {
+                public void mouseEntered(final java.awt.event.MouseEvent evt) {
                     botao.setBackground(hoverColor);
                 }
 
                 @Override
-                public void mouseExited(java.awt.event.MouseEvent evt) {
+                public void mouseExited(final java.awt.event.MouseEvent evt) {
                     botao.setBackground(new Color(0, 0, 0, 0)); // volta a ser transparente
                 }
 
                 @Override
-                public void mousePressed(java.awt.event.MouseEvent evt) {
+                public void mousePressed(final java.awt.event.MouseEvent evt) {
                     botao.setBackground(hoverColor);
                 }
 
                 @Override
-                public void mouseReleased(java.awt.event.MouseEvent evt) {
+                public void mouseReleased(final java.awt.event.MouseEvent evt) {
                     botao.setBackground(hoverColor);
                 }
             });
         }
 
         // Configura cada botão principal
-        for (JButton botao : botoes) {
+        for (final JButton botao : botoes) {
             if (botao != null) {
                 botao.putClientProperty("JButton.arc", 20); // raio de arredondamento
                 botao.setFocusPainted(false);
@@ -485,8 +595,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
         UIManager.put("Button.arc", 15);
         SwingUtilities.updateComponentTreeUI(this);
     }
-
-    private void toggleSidebarButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_toggleSidebarButtonActionPerformed
+    private void toggleSidebarButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_toggleSidebarButtonActionPerformed
         isSidebarExpanded = !isSidebarExpanded;
 
         if (isSidebarExpanded) {
@@ -495,7 +604,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
             titulo.setVisible(true);
             jSeparator.setVisible(true);
             // Mostra todos os botões
-            for (Component comp : sidePanel.getComponents()) {
+            for (final Component comp : sidePanel.getComponents()) {
                 if (comp != toggleSidebarButton && comp != titulo && comp != jSeparator) {
                     comp.setVisible(true);
                 }
@@ -507,7 +616,7 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
             titulo.setVisible(false);
             jSeparator.setVisible(false);
             // Esconde todos os botões exceto o toggle e version
-            for (Component comp : sidePanel.getComponents()) {
+            for (final Component comp : sidePanel.getComponents()) {
                 if (comp != toggleSidebarButton && comp != titulo && comp != jSeparator) {
                     comp.setVisible(false);
                 }
@@ -526,73 +635,18 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
         sidePanel.revalidate();
         sidePanel.repaint();
     }// GEN-LAST:event_toggleSidebarButtonActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-        // (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-         * look and feel.
-         * For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        // try {
-        // for (javax.swing.UIManager.LookAndFeelInfo info :
-        // javax.swing.UIManager.getInstalledLookAndFeels()) {
-        // if ("Nimbus".equals(info.getName())) {
-        // javax.swing.UIManager.setLookAndFeel(info.getClassName());
-        // break;
-        // }
-        // }
-        // } catch (ClassNotFoundException ex) {
-        // java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE,
-        // null, ex);
-        // } catch (InstantiationException ex) {
-        // java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE,
-        // null, ex);
-        // } catch (IllegalAccessException ex) {
-        // java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE,
-        // null, ex);
-        // } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-        // java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE,
-        // null, ex);
-        // }
-        // </editor-fold>
-
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new MainWindow().setVisible(true);
-            }
-        });
-    }
-
-    public void start() {
-        loadCategoryButtons(); // Carrega botões ao iniciar
-        setVisible(true);
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                performLayoutAdjustments();
-            }
-        });
-    }
-
     // Método para atualizar todos os componentes
     private void atualizarUI() {
         SwingUtilities.updateComponentTreeUI(this); // Atualiza o JFrame principal
     }
-
     // Novo método para carregar botões do banco
     private void loadCategoryButtons() {
         buttonsPanel.removeAll();
 
-        List<Categorias> categorias = dbService.listarCategorias();
+        final List<Categorias> categorias = dbService.listarCategorias();
 
-        for (Categorias categoria : categorias) {
-            JButton btn = createCategoryButton(categoria);
+        for (final Categorias categoria : categorias) {
+            final JButton btn = createCategoryButton(categoria);
             buttonsPanel.add(btn);
             buttonsPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Espaçamento vertical
         }
@@ -602,8 +656,8 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
     }
 
     // Método para criar botões estilizados
-    private JButton createCategoryButton(Categorias categoria) {
-        JButton button = new JButton(categoria.getNome());
+    private JButton createCategoryButton(final Categorias categoria) {
+        final JButton button = new JButton(categoria.getNome());
         button.setFont(new Font("SansSerif", Font.BOLD, 18));
         button.setHorizontalAlignment(SwingConstants.LEFT);
         button.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -625,69 +679,15 @@ public class MainWindow extends JFrame implements SidebarListener , UpdateFrameL
 
         // Efeito hover
         button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(final java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(0, 122, 57));
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(final java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(0, 163, 53));
             }
         });
 
         return button;
-    }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel contentPanel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JSeparator jSeparator;
-    private javax.swing.JPanel mainPanel;
-    private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem menuCheckUpdate;
-    private javax.swing.JMenu menuEdit;
-    private javax.swing.JMenu menuFile;
-    private javax.swing.JMenu menuHelp;
-    private javax.swing.JMenuItem menuSair;
-    private javax.swing.JMenuItem menuSobre;
-    private javax.swing.JMenuItem menuTema;
-    private javax.swing.JPanel sidePanel;
-    private javax.swing.JTabbedPane tabbedPane;
-    private javax.swing.JLabel titulo;
-    private javax.swing.JButton toggleSidebarButton;
-    // End of variables declaration//GEN-END:variables
-
-    @Override
-    public void onCategorySelected(Categorias category) {
-        ChecklistViewer newPane = new ChecklistViewer(category, dbService);
-
-        // Adiciona a nova aba
-        // tabbedPane.addTab(category, pane);
-        tabbedPane.addTab(category.getNome(), newPane);
-
-        // Cria o painel com o título e botão de fechar
-        JPanel aba = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        aba.setOpaque(false);
-
-        JLabel label = new JLabel(category.getNome());
-        JButton close = new JButton("x");
-        close.setForeground(Color.RED);
-        close.setContentAreaFilled(false);
-        close.setBorderPainted(false);
-        close.setMargin(new Insets(0, 5, 0, 5));
-        close.addActionListener(e -> {
-            // int index = tabbedPane.indexOfComponent(pane);
-            int index = tabbedPane.indexOfComponent(newPane);
-            if (index != -1) {
-                tabbedPane.remove(index);
-            }
-        });
-
-        aba.add(label);
-        aba.add(close);
-
-        // tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(pane), aba);
-        tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(newPane), aba);
-        // tabbedPane.setSelectedComponent(pane);
-        tabbedPane.setSelectedComponent(newPane);
     }
 }

@@ -17,37 +17,23 @@ public class LocalDatabaseService {
 
     private static final String DB_URL = "jdbc:sqlite:../db/dblocal.db";
 
-    // Retorna uma nova conexão com o banco local
-    private Connection conectar() throws SQLException {
-        String dbPath = System.getProperty("user.dir") + "/db/dblocal.db";
-        System.out.println("Tentando conectar ao banco em: " + dbPath);
-
-        File dbFile = new File(dbPath);
-        if (!dbFile.exists()) {
-            throw new SQLException("Arquivo do banco de dados não encontrado em: " + dbPath);
-        }
-
-        return DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-        // return DriverManager.getConnection(DB_URL);
-    }
-
     // para botões laterais
     public List<Categorias> listarCategorias() {
-        List<Categorias> categorias = new ArrayList<>();
-        String sql = "SELECT id, nome FROM categorias ORDER BY id ASC";
+        final List<Categorias> categorias = new ArrayList<>();
+        final String sql = "SELECT id, nome FROM categorias ORDER BY id ASC";
 
         try (Connection conn = conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Categorias categoria = new Categorias();
+                final Categorias categoria = new Categorias();
                 categoria.setId(rs.getInt("id"));
                 categoria.setNome(rs.getString("nome"));
                 categorias.add(categoria);
             }
 
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("Erro ao listar categorias: " + e.getMessage());
         }
 
@@ -55,9 +41,9 @@ public class LocalDatabaseService {
     }
 
     // para preencher a jList do painel direito
-    public List<Checklist> listarChecklistsPorCategoria(int categoriaId) {
-        List<Checklist> checklists = new ArrayList<>();
-        String sql = "SELECT id, titulo, categoria_id FROM checklists WHERE categoria_id = ? ORDER BY titulo ASC";
+    public List<Checklist> listarChecklistsPorCategoria(final int categoriaId) {
+        final List<Checklist> checklists = new ArrayList<>();
+        final String sql = "SELECT id, titulo, categoria_id FROM checklists WHERE categoria_id = ? ORDER BY titulo ASC";
 
         try (Connection conn = conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -65,7 +51,7 @@ public class LocalDatabaseService {
             stmt.setInt(1, categoriaId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Checklist checklist = new Checklist();
+                    final Checklist checklist = new Checklist();
                     checklist.setId(rs.getInt("id"));
                     checklist.setTitulo(rs.getString("titulo"));
                     checklist.setIdCategoria(rs.getInt("categoria_id"));
@@ -73,7 +59,7 @@ public class LocalDatabaseService {
                 }
             }
 
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("Erro ao listar checklists: " + e.getMessage());
         }
 
@@ -81,9 +67,9 @@ public class LocalDatabaseService {
     }
 
     // para montar o conteúdo do JCheckBoxes
-    public List<ChecklistItens> listarItensPorChecklist(int checklistId) {
-        List<ChecklistItens> itens = new ArrayList<>();
-        String sql = "SELECT id, checklist_id, texto, ordem FROM checklist_itens WHERE checklist_id = ? ORDER BY ordem ASC";
+    public List<ChecklistItens> listarItensPorChecklist(final int checklistId) {
+        final List<ChecklistItens> itens = new ArrayList<>();
+        final String sql = "SELECT id, checklist_id, texto, ordem FROM checklist_itens WHERE checklist_id = ? ORDER BY ordem ASC";
 
         try (Connection conn = conectar();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -91,7 +77,7 @@ public class LocalDatabaseService {
             stmt.setInt(1, checklistId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    ChecklistItens item = new ChecklistItens();
+                    final ChecklistItens item = new ChecklistItens();
                     item.setId(rs.getInt("id"));
                     item.setIdChecklist(rs.getInt("checklist_id"));
                     item.setTexto(rs.getString("texto"));
@@ -100,11 +86,25 @@ public class LocalDatabaseService {
                 }
             }
 
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("Erro ao listar itens do checklist: " + e.getMessage());
         }
 
         return itens;
+    }
+
+    // Retorna uma nova conexão com o banco local
+    private Connection conectar() throws SQLException {
+        final String dbPath = System.getProperty("user.dir") + "/db/dblocal.db";
+        System.out.println("Tentando conectar ao banco em: " + dbPath);
+
+        final File dbFile = new File(dbPath);
+        if (!dbFile.exists()) {
+            throw new SQLException("Arquivo do banco de dados não encontrado em: " + dbPath);
+        }
+
+        return DriverManager.getConnection("jdbc:sqlite:" + dbPath);
+        // return DriverManager.getConnection(DB_URL);
     }
 
 }

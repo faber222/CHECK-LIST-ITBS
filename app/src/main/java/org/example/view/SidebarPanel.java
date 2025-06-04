@@ -20,11 +20,11 @@ import org.example.service.LocalDatabaseService;
 
 public class SidebarPanel extends JPanel {
 
-    private SidebarListener listener;
+    private final SidebarListener listener;
     private final Map<String, JButton> botoes = new LinkedHashMap<>();
-    private LocalDatabaseService dbService;
+    private final LocalDatabaseService dbService;
 
-    public SidebarPanel(SidebarListener listener) {
+    public SidebarPanel(final SidebarListener listener) {
         this.listener = listener;
         this.dbService = new LocalDatabaseService();
 
@@ -43,9 +43,9 @@ public class SidebarPanel extends JPanel {
     }
 
     private void carregarCategorias() {
-        List<Categorias> categorias = dbService.listarCategorias();
-        for (Categorias categoria : categorias) {
-            JButton botao = new JButton(categoria.getNome());
+        final List<Categorias> categorias = dbService.listarCategorias();
+        for (final Categorias categoria : categorias) {
+            final JButton botao = new JButton(categoria.getNome());
             botao.setAlignmentX(Component.LEFT_ALIGNMENT);
             botao.addActionListener(e -> listener.onCategorySelected(categoria));
             add(botao);
@@ -67,7 +67,7 @@ public class SidebarPanel extends JPanel {
     // }
 
     private void estilizarBotoes() {
-        for (JButton botao : botoes.values()) {
+        for (final JButton botao : botoes.values()) {
             botao.putClientProperty("JButton.buttonType", "roundRect");
             botao.setFocusPainted(false);
             botao.setContentAreaFilled(true);

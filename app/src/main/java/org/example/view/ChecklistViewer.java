@@ -38,21 +38,35 @@ import org.example.service.LocalDatabaseService;
 
 public class ChecklistViewer extends JPanel {
 
+    private static class ChecklistItem {
+        String nome;
+        ChecklistType tipo;
+
+        ChecklistItem(final String nome, final ChecklistType tipo) {
+            this.nome = nome;
+            this.tipo = tipo;
+        }
+    }
+    private enum ChecklistType {
+        CHECKBOX, TEXTAREA
+    }
     private final JList<String> checklistList;
+
     private final JPanel checklistContentPanel;
+
     private final Map<String, List<ChecklistItem>> checklists;
 
-    public ChecklistViewer(Categorias categoria, LocalDatabaseService dbService) {
+    public ChecklistViewer(final Categorias categoria, final LocalDatabaseService dbService) {
         setLayout(new BorderLayout());
 
         checklists = new LinkedHashMap<>();
-        List<Checklist> checklistsData = dbService.listarChecklistsPorCategoria(categoria.getId());
+        final List<Checklist> checklistsData = dbService.listarChecklistsPorCategoria(categoria.getId());
 
-        for (Checklist checklist : checklistsData) {
-            List<ChecklistItens> itens = dbService.listarItensPorChecklist(checklist.getId());
-            List<ChecklistItem> checklistItems = new ArrayList<>();
+        for (final Checklist checklist : checklistsData) {
+            final List<ChecklistItens> itens = dbService.listarItensPorChecklist(checklist.getId());
+            final List<ChecklistItem> checklistItems = new ArrayList<>();
 
-            for (ChecklistItens item : itens) {
+            for (final ChecklistItens item : itens) {
                 checklistItems.add(new ChecklistItem(
                         item.getTexto(),
                         ChecklistType.CHECKBOX));
@@ -72,18 +86,18 @@ public class ChecklistViewer extends JPanel {
             private int indiceAnterior = 0;
 
             @Override
-            public void valueChanged(ListSelectionEvent e) {
+            public void valueChanged(final ListSelectionEvent e) {
                 if (bloqueando || e.getValueIsAdjusting())
                     return;
 
-                int novoIndice = checklistList.getSelectedIndex();
+                final int novoIndice = checklistList.getSelectedIndex();
                 if (novoIndice == -1 || novoIndice == indiceAnterior)
                     return;
 
-                String novoChecklist = checklistList.getModel().getElementAt(novoIndice);
+                final String novoChecklist = checklistList.getModel().getElementAt(novoIndice);
 
                 if (houveAlteracoes()) {
-                    int resposta = JOptionPane.showConfirmDialog(
+                    final int resposta = JOptionPane.showConfirmDialog(
                             null,
                             "Você fez alterações no checklist atual.\nSe continuar, perderá os dados não salvos.\nDeseja continuar?",
                             "Atenção",
@@ -105,7 +119,7 @@ public class ChecklistViewer extends JPanel {
             }
         });
 
-        JScrollPane scrollList = new JScrollPane(checklistList);
+        final JScrollPane scrollList = new JScrollPane(checklistList);
         scrollList.setPreferredSize(new Dimension(200, 0));
         scrollList.setBorder(BorderFactory.createTitledBorder("Modelos"));
 
@@ -113,24 +127,24 @@ public class ChecklistViewer extends JPanel {
         checklistContentPanel.setLayout(new BoxLayout(checklistContentPanel, BoxLayout.Y_AXIS));
 
         // Envolve o conteúdo com botão
-        JPanel painelDireito = new JPanel(new BorderLayout());
-        JScrollPane scrollContent = new JScrollPane(checklistContentPanel);
+        final JPanel painelDireito = new JPanel(new BorderLayout());
+        final JScrollPane scrollContent = new JScrollPane(checklistContentPanel);
         scrollContent.setBorder(BorderFactory.createTitledBorder("Itens"));
         painelDireito.add(scrollContent, BorderLayout.CENTER);
 
         // Botão no canto inferior direito
-        JPanel painelBotao = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton btnCopiar = new JButton("Copiar");
+        final JPanel painelBotao = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        final JButton btnCopiar = new JButton("Copiar");
         painelBotao.add(btnCopiar);
         btnCopiar.addActionListener(new java.awt.event.ActionListener() {
             @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 btnCopiarActionPerformed(evt);
             }
         });
 
         painelDireito.add(painelBotao, BorderLayout.SOUTH);
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollList, painelDireito);
+        final JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollList, painelDireito);
         splitPane.setDividerLocation(200);
 
         add(splitPane, BorderLayout.CENTER);
@@ -139,19 +153,19 @@ public class ChecklistViewer extends JPanel {
         mostrarChecklist(checklistList.getSelectedValue());
     }
 
-    private void mostrarChecklist(String nomeChecklist) {
+    private void mostrarChecklist(final String nomeChecklist) {
         checklistContentPanel.removeAll();
 
-        java.util.List<ChecklistItem> itens = checklists.get(nomeChecklist);
+        final java.util.List<ChecklistItem> itens = checklists.get(nomeChecklist);
         if (itens != null) {
-            for (ChecklistItem item : itens) {
+            for (final ChecklistItem item : itens) {
                 if (item.tipo == ChecklistType.CHECKBOX) {
-                    JCheckBox cb = new JCheckBox(item.nome);
+                    final JCheckBox cb = new JCheckBox(item.nome);
                     cb.setAlignmentX(Component.LEFT_ALIGNMENT);
                     checklistContentPanel.add(cb);
                 } else if (item.tipo == ChecklistType.TEXTAREA) {
-                    JLabel label = new JLabel(item.nome + ":");
-                    JTextArea area = new JTextArea(3, 40);
+                    final JLabel label = new JLabel(item.nome + ":");
+                    final JTextArea area = new JTextArea(3, 40);
                     checklistContentPanel.add(label);
                     checklistContentPanel.add(Box.createRigidArea(new Dimension(0, 5)));
                     checklistContentPanel.add(new JScrollPane(area));
@@ -165,17 +179,17 @@ public class ChecklistViewer extends JPanel {
     }
 
     private boolean houveAlteracoes() {
-        for (Component comp : checklistContentPanel.getComponents()) {
+        for (final Component comp : checklistContentPanel.getComponents()) {
             if (comp instanceof JCheckBox) {
-                JCheckBox check = (JCheckBox) comp;
+                final JCheckBox check = (JCheckBox) comp;
                 if (check.isSelected()) {
                     return true;
                 }
             } else if (comp instanceof JScrollPane) {
-                JScrollPane scroll = (JScrollPane) comp;
-                Component view = scroll.getViewport().getView();
+                final JScrollPane scroll = (JScrollPane) comp;
+                final Component view = scroll.getViewport().getView();
                 if (view instanceof JTextArea) {
-                    JTextArea area = (JTextArea) view;
+                    final JTextArea area = (JTextArea) view;
                     if (!area.getText().trim().isEmpty()) {
                         return true;
                     }
@@ -185,23 +199,23 @@ public class ChecklistViewer extends JPanel {
         return false;
     }
 
-    private void btnCopiarActionPerformed(java.awt.event.ActionEvent evt) {
-        StringBuilder sb = new StringBuilder();
+    private void btnCopiarActionPerformed(final java.awt.event.ActionEvent evt) {
+        final StringBuilder sb = new StringBuilder();
 
-        for (Component comp : checklistContentPanel.getComponents()) {
+        for (final Component comp : checklistContentPanel.getComponents()) {
             if (comp instanceof JCheckBox) {
-                JCheckBox check = (JCheckBox) comp;
+                final JCheckBox check = (JCheckBox) comp;
                 if (check.isSelected()) {
                     sb.append("[✓] ").append(check.getText()).append("\n");
                 } else {
                     sb.append("[ ] ").append(check.getText()).append("\n");
                 }
             } else if (comp instanceof JScrollPane) {
-                JScrollPane scroll = (JScrollPane) comp;
-                Component view = scroll.getViewport().getView();
+                final JScrollPane scroll = (JScrollPane) comp;
+                final Component view = scroll.getViewport().getView();
                 if (view instanceof JTextArea) {
-                    JTextArea area = (JTextArea) view;
-                    String text = area.getText().trim();
+                    final JTextArea area = (JTextArea) view;
+                    final String text = area.getText().trim();
                     if (!text.isEmpty()) {
                         sb.append(area.getText()).append("\n");
                     }
@@ -209,7 +223,7 @@ public class ChecklistViewer extends JPanel {
             }
         }
 
-        String resultado = sb.toString().trim();
+        final String resultado = sb.toString().trim();
         if (!resultado.isEmpty()) {
             Toolkit.getDefaultToolkit().getSystemClipboard()
                     .setContents(new java.awt.datatransfer.StringSelection(resultado), null);
@@ -217,19 +231,5 @@ public class ChecklistViewer extends JPanel {
         } else {
             System.out.println("Nenhum item selecionado ou preenchido.");
         }
-    }
-
-    private static class ChecklistItem {
-        String nome;
-        ChecklistType tipo;
-
-        ChecklistItem(String nome, ChecklistType tipo) {
-            this.nome = nome;
-            this.tipo = tipo;
-        }
-    }
-
-    private enum ChecklistType {
-        CHECKBOX, TEXTAREA
     }
 }

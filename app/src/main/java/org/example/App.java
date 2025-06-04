@@ -17,10 +17,10 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 public class App {
     private static boolean darkMode = true; // Tema padrão: Dark
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
         // Carrega a preferência salva
-        Preferences prefs = Preferences.userNodeForPackage(App.class);
+        final Preferences prefs = Preferences.userNodeForPackage(App.class);
         darkMode = prefs.getBoolean("DARK_MODE", true); // Default: Dark
         FlatLaf.registerCustomDefaultsSource("themes");
         // Aplica o tema inicial
@@ -28,16 +28,16 @@ public class App {
 
         // Cria e exibe a janela principal
         SwingUtilities.invokeLater(() -> {
-            MainWindow slaveMDIFrame = new MainWindow();
+            final MainWindow slaveMDIFrame = new MainWindow();
             slaveMDIFrame.start();
         });
     }
 
     // Método estático para trocar o tema (acessível de qualquer lugar)
-    public static void atualizarTemaGlobal(boolean isDarkMode) {
+    public static void atualizarTemaGlobal(final boolean isDarkMode) {
         try {
             darkMode = isDarkMode;
-            Preferences prefs = Preferences.userNodeForPackage(App.class);
+            final Preferences prefs = Preferences.userNodeForPackage(App.class);
             prefs.putBoolean("DARK_MODE", darkMode);
             if (isDarkMode) {
                 UIManager.setLookAndFeel(new FlatMacDarkLaf());
@@ -46,7 +46,7 @@ public class App {
 
             }
 
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
