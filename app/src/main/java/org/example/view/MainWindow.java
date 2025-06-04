@@ -27,6 +27,7 @@ import javax.swing.UIManager;
 
 import org.example.App;
 import org.example.controller.SidebarListener;
+import org.example.controller.UpdateFrameListener;
 import org.example.model.Categorias;
 import org.example.service.LocalDatabaseService;
 
@@ -34,7 +35,7 @@ import org.example.service.LocalDatabaseService;
  *
  * @author faber222
  */
-public class MainWindow extends JFrame implements SidebarListener {
+public class MainWindow extends JFrame implements SidebarListener , UpdateFrameListener {
 
     private boolean isSidebarExpanded = true;
     private final int COLLAPSED_WIDTH = 40;
@@ -42,16 +43,23 @@ public class MainWindow extends JFrame implements SidebarListener {
     private JPanel buttonsPanel; // Novo painel para botões dinâmicos
     private final LocalDatabaseService dbService;
     private JScrollPane buttonsScrollPane;
+    private UpdateFrame updateFrame;
+    private String ipAddress;
 
     /**
      * Creates new form SlaveMDIFrame
      */
     public MainWindow() {
+        updateFrame = new UpdateFrame();
         initComponents();
         dbService = new LocalDatabaseService();
         sidePanel.setBackground(new Color(0, 163, 53));
 
         configurarBotoesArredondados();
+    }
+
+    public void onProfileCreated(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     /**
@@ -295,7 +303,8 @@ public class MainWindow extends JFrame implements SidebarListener {
     }// GEN-LAST:event_menuTemaActionPerformed
 
     private void menuCheckUpdateActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuCheckUpdateActionPerformed
-        // TODO add your handling code here:
+        updateFrame.setListener(this);
+        updateFrame.setVisible(true);
     }// GEN-LAST:event_menuCheckUpdateActionPerformed
 
     private void menuSobreActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSobreActionPerformed
@@ -681,5 +690,4 @@ public class MainWindow extends JFrame implements SidebarListener {
         // tabbedPane.setSelectedComponent(pane);
         tabbedPane.setSelectedComponent(newPane);
     }
-
 }
