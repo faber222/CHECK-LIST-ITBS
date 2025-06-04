@@ -43,18 +43,10 @@ public class ChecklistViewer extends JPanel {
     private final Map<String, List<ChecklistItem>> checklists;
 
     public ChecklistViewer(Categorias categoria, LocalDatabaseService dbService) {
-        // Checklist mainChecklist = new Checklist();
-        // ChecklistItens boxChecklistItens = new ChecklistItens();
         setLayout(new BorderLayout());
 
         checklists = new LinkedHashMap<>();
         List<Checklist> checklistsData = dbService.listarChecklistsPorCategoria(categoria.getId());
-        // List<ChecklistItens> checklistItensData = new ArrayList<>();
-        // Simulação de dados (futuramente pode vir de JSON)
-
-        // for (Checklist elem : checklistsData) {
-        // checklistItensData = dbService.listarItensPorChecklist(elem.getId());
-        // }
 
         for (Checklist checklist : checklistsData) {
             List<ChecklistItens> itens = dbService.listarItensPorChecklist(checklist.getId());
@@ -70,15 +62,6 @@ public class ChecklistViewer extends JPanel {
                     ChecklistType.TEXTAREA));
             checklists.put(checklist.getTitulo(), checklistItems);
         }
-
-        // checklists.put("Instalação Roteador", Arrays.asList(
-        // new ChecklistItem("Verificar alimentação", ChecklistType.CHECKBOX),
-        // new ChecklistItem("SSID configurado", ChecklistType.CHECKBOX),
-        // new ChecklistItem("Observações", ChecklistType.TEXTAREA)));
-        // checklists.put("Diagnóstico Wi-Fi", Arrays.asList(
-        // new ChecklistItem("Teste de velocidade", ChecklistType.CHECKBOX),
-        // new ChecklistItem("Cliente conectado?", ChecklistType.CHECKBOX),
-        // new ChecklistItem("Descrição do problema", ChecklistType.TEXTAREA)));
 
         // Lista lateral de nomes dos checkBoxes
         checklistList = new JList<>(checklists.keySet().toArray(new String[0]));
@@ -126,12 +109,6 @@ public class ChecklistViewer extends JPanel {
         scrollList.setPreferredSize(new Dimension(200, 0));
         scrollList.setBorder(BorderFactory.createTitledBorder("Modelos"));
 
-        // Painel da direita com os itens do checklist
-        // checklistContentPanel = new JPanel();
-        // checklistContentPanel.setLayout(new BoxLayout(checklistContentPanel,
-        // BoxLayout.Y_AXIS));
-        // JScrollPane scrollContent = new JScrollPane(checklistContentPanel);
-        // scrollContent.setBorder(BorderFactory.createTitledBorder("Itens"));
         checklistContentPanel = new JPanel();
         checklistContentPanel.setLayout(new BoxLayout(checklistContentPanel, BoxLayout.Y_AXIS));
 
@@ -153,10 +130,6 @@ public class ChecklistViewer extends JPanel {
         });
 
         painelDireito.add(painelBotao, BorderLayout.SOUTH);
-
-        // Divide horizontalmente: lista à esquerda, conteúdo à direita
-        // JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-        // scrollList, scrollContent);
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollList, painelDireito);
         splitPane.setDividerLocation(200);
 
