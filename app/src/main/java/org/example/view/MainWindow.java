@@ -11,6 +11,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Insets;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -19,6 +21,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -30,12 +33,13 @@ import org.example.controller.RenewDbListener;
 import org.example.controller.SidebarListener;
 import org.example.model.Categorias;
 import org.example.service.LocalDatabaseService;
+import org.example.service.RemoteSyncService;
 
 /**
  *
  * @author faber222
  */
-public class MainWindow extends JFrame implements SidebarListener , RenewDbListener {
+public class MainWindow extends JFrame implements SidebarListener, RenewDbListener {
 
     /**
      * @param args the command line arguments
@@ -79,13 +83,14 @@ public class MainWindow extends JFrame implements SidebarListener , RenewDbListe
             }
         });
     }
+
     private boolean isSidebarExpanded = true;
     private final int COLLAPSED_WIDTH = 40;
     private final int EXPANDED_WIDTH = 213;
     private JPanel buttonsPanel; // Novo painel para botões dinâmicos
     private final LocalDatabaseService dbService;
     private JScrollPane buttonsScrollPane;
-    private final RenewDb updateFrame;
+    private RenewDb updateFrame;
 
     private String ipAddress;
 
@@ -120,21 +125,90 @@ public class MainWindow extends JFrame implements SidebarListener , RenewDbListe
 
     private javax.swing.JLabel titulo;
     private javax.swing.JButton toggleSidebarButton;
+
     // End of variables declaration//GEN-END:variables
     /**
      * Creates new form SlaveMDIFrame
      */
     public MainWindow() {
-        updateFrame = new RenewDb();
+        
         initComponents();
         dbService = new LocalDatabaseService();
         sidePanel.setBackground(new Color(0, 163, 53));
+        setLocationRelativeTo(null);
 
         configurarBotoesArredondados();
     }
-    public void onProfileCreated(final String ipAddress) {
+
+    public void onProfileCreated(String ipAddress) {
         this.ipAddress = ipAddress;
+        System.out.println("IP do servidor remoto recebido na MainWindow: " + this.ipAddress);
+
+        if (this.ipAddress == null || this.ipAddress.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "O endereço IP não pode ser vazio.", "Erro de IP",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Instancia e usa o RemoteSyncService
+        RemoteSyncService syncService = new RemoteSyncService();
+
+        // É altamente recomendável executar operações de rede em uma thread separada
+        // para não bloquear a Interface do Usuário (UI Thread).
+        // Por exemplo, usando SwingWorker ou CompletableFuture.
+        // Para este exemplo inicial, faremos diretamente, mas esteja ciente disso.
+        new Thread(() -> {
+            // Tenta conectar (e futuramente sincronizar)
+            // O método syncAllDataFromRemote já tenta conectar internamente
+            try {
+                syncService.syncAllDataFromRemote(this.ipAddress);
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            // Exibe uma mensagem na UI Thread após a tentativa
+            // Apenas para feedback inicial, a lógica de sucesso/falha pode ser mais
+            // elaborada
+            SwingUtilities.invokeLater(() -> {
+                // Poderia verificar um status retornado pelo syncService se necessário,
+                // mas por agora, os logs no console indicarão sucesso/falha da conexão.
+                // Para uma UI mais rica, o syncService.syncAllDataFromRemote() poderia retornar
+                // um booleano
+                // ou lançar uma exceção específica que você trataria aqui para mostrar um
+                // JOptionPane.
+                // Neste momento, vamos assumir que o usuário verificará os logs.
+                // Se você quiser um feedback visual imediato da tentativa de conexão:
+
+                Connection testConnection = syncService.connectToRemoteServer(this.ipAddress);
+                if (testConnection != null) {
+                    JOptionPane.showMessageDialog(this,
+                            "Tentativa de conexão com o servidor remoto (" + this.ipAddress
+                                    + ") iniciada. Verifique os logs para detalhes.",
+                            "Sincronização", JOptionPane.INFORMATION_MESSAGE);
+                    try {
+                        testConnection.close();
+                    } catch (SQLException ex) {
+                        /* ignore */ }
+                } else {
+                    JOptionPane
+                            .showMessageDialog(this,
+                                    "Falha ao iniciar conexão com o servidor remoto (" + this.ipAddress
+                                            + "). Verifique o IP e os logs.",
+                                    "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+                }
+
+                // A linha abaixo é apenas um placeholder, você ajustaria conforme o feedback do
+                // syncService
+                JOptionPane.showMessageDialog(this,
+                        "Processo de verificação de atualizações com " + this.ipAddress
+                                + " disparado. Veja os logs para o status da conexão.",
+                        "Atualização", JOptionPane.INFORMATION_MESSAGE);
+            });
+
+        }).start();
     }
+
     public void start() {
         loadCategoryButtons(); // Carrega botões ao iniciar
         setVisible(true);
@@ -144,6 +218,7 @@ public class MainWindow extends JFrame implements SidebarListener , RenewDbListe
             }
         });
     }
+
     @Override
     public void onCategorySelected(final Categorias category) {
         final ChecklistViewer newPane = new ChecklistViewer(category, dbService);
@@ -178,6 +253,7 @@ public class MainWindow extends JFrame implements SidebarListener , RenewDbListe
         // tabbedPane.setSelectedComponent(pane);
         tabbedPane.setSelectedComponent(newPane);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -255,7 +331,8 @@ public class MainWindow extends JFrame implements SidebarListener , RenewDbListe
         buttonsScrollPane.setBorder(BorderFactory.createEmptyBorder());
         buttonsScrollPane.setViewportBorder(null);
 
-        // buttonsScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
+        // buttonsScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0,
+        // 0));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 3, 9)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -371,14 +448,14 @@ public class MainWindow extends JFrame implements SidebarListener , RenewDbListe
         });
         menuHelp.add(menuCheckUpdate);
 
-        menuSobre.setText("Sobre");
-        menuSobre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                menuSobreActionPerformed(evt);
-            }
-        });
+        // menuSobre.setText("Sobre");
+        // menuSobre.addActionListener(new java.awt.event.ActionListener() {
+        //     public void actionPerformed(final java.awt.event.ActionEvent evt) {
+        //         menuSobreActionPerformed(evt);
+        //     }
+        // });
 
-        menuHelp.add(menuSobre);
+        // menuHelp.add(menuSobre);
         menuBar.add(menuHelp);
 
         setJMenuBar(menuBar);
@@ -412,17 +489,22 @@ public class MainWindow extends JFrame implements SidebarListener , RenewDbListe
         });
 
     }// </editor-fold>//GEN-END:initComponents
+
     private void menuTemaActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuTemaActionPerformed
         App.atualizarTemaGlobal(!App.isDarkMode());
         atualizarUI();
     }// GEN-LAST:event_menuTemaActionPerformed
+
     private void menuCheckUpdateActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuCheckUpdateActionPerformed
+        updateFrame = new RenewDb();
         updateFrame.setListener(this);
         updateFrame.setVisible(true);
     }// GEN-LAST:event_menuCheckUpdateActionPerformed
-    private void menuSobreActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSobreActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_menuSobreActionPerformed
+
+    // private void menuSobreActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSobreActionPerformed
+    //     // TODO add your handling code here:
+    // }// GEN-LAST:event_menuSobreActionPerformed
+
     private void performLayoutAdjustments() {
         // Adicionado para evitar NullPointerException se chamado muito cedo
         if (mainPanel == null || sidePanel == null || titulo == null || jSeparator == null || jLabel1 == null
@@ -522,6 +604,7 @@ public class MainWindow extends JFrame implements SidebarListener , RenewDbListe
             }
         });
     }
+
     private void menuSairActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSairActionPerformed
         // Fechar todas as janelas/jframes abertos
         for (final Frame frame : Frame.getFrames()) {
@@ -542,6 +625,7 @@ public class MainWindow extends JFrame implements SidebarListener , RenewDbListe
         }
         System.exit(0);
     }// GEN-LAST:event_menuSairActionPerformed
+
     private void configurarBotoesArredondados() {
         final Color hoverColor = new Color(0, 122, 57);
 
@@ -595,6 +679,7 @@ public class MainWindow extends JFrame implements SidebarListener , RenewDbListe
         UIManager.put("Button.arc", 15);
         SwingUtilities.updateComponentTreeUI(this);
     }
+
     private void toggleSidebarButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_toggleSidebarButtonActionPerformed
         isSidebarExpanded = !isSidebarExpanded;
 
@@ -635,10 +720,12 @@ public class MainWindow extends JFrame implements SidebarListener , RenewDbListe
         sidePanel.revalidate();
         sidePanel.repaint();
     }// GEN-LAST:event_toggleSidebarButtonActionPerformed
-    // Método para atualizar todos os componentes
+     // Método para atualizar todos os componentes
+
     private void atualizarUI() {
         SwingUtilities.updateComponentTreeUI(this); // Atualiza o JFrame principal
     }
+
     // Novo método para carregar botões do banco
     private void loadCategoryButtons() {
         buttonsPanel.removeAll();

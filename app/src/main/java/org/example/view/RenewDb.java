@@ -32,6 +32,7 @@ public class RenewDb extends javax.swing.JFrame {
      */
     public RenewDb() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     public void setListener(final RenewDbListener listener) {
