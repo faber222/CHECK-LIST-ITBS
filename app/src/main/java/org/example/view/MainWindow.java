@@ -11,7 +11,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Insets;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -131,7 +130,7 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
      * Creates new form SlaveMDIFrame
      */
     public MainWindow() {
-        
+
         initComponents();
         dbService = new LocalDatabaseService();
         sidePanel.setBackground(new Color(0, 163, 53));
@@ -151,61 +150,45 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
         }
 
         // Instancia e usa o RemoteSyncService
-        RemoteSyncService syncService = new RemoteSyncService();
 
-        // É altamente recomendável executar operações de rede em uma thread separada
-        // para não bloquear a Interface do Usuário (UI Thread).
-        // Por exemplo, usando SwingWorker ou CompletableFuture.
-        // Para este exemplo inicial, faremos diretamente, mas esteja ciente disso.
+        // Mostra uma mensagem de que o processo iniciou
+        JOptionPane.showMessageDialog(this,
+                "Iniciando sincronização com o servidor: " + this.ipAddress + ".\nPor favor, aguarde...",
+                "Sincronização em Progresso",
+                JOptionPane.INFORMATION_MESSAGE);
         new Thread(() -> {
-            // Tenta conectar (e futuramente sincronizar)
-            // O método syncAllDataFromRemote já tenta conectar internamente
+            RemoteSyncService syncService = new RemoteSyncService();
             try {
-                syncService.syncAllDataFromRemote(this.ipAddress);
+                boolean sucesso = syncService.syncAllDataFromRemote(this.ipAddress);
+                // Exibe uma mensagem na UI Thread após a tentativa
+                SwingUtilities.invokeLater(() -> {
+                    if (sucesso) {
+                        JOptionPane.showMessageDialog(this,
+                                "Sincronização com o servidor remoto (" + this.ipAddress
+                                        + ") concluída com sucesso!\nO banco de dados local foi atualizado!",
+                                "Sincronização Concluída",
+                                JOptionPane.INFORMATION_MESSAGE);
+
+                        // Atualizar a interface gráfica
+                        System.out.println("Recarregando botões da sidebar e limpando abas...");
+                        tabbedPane.removeAll(); // Remove todas as abas abertas
+                        loadCategoryButtons(); // Recarrega os botões da categoria na sidebar
+
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "Falha na sincronização com o servidor remoto (" + this.ipAddress
+                                        + ").\nVerifique o endereço IP, a conexão com a internet e os logs do console para mais detalhes.",
+                                "Erro de Sincronização",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    // Se o updateFrame (RenewDb) ainda estiver visível, você pode fechá-lo aqui
+                    if (updateFrame != null && updateFrame.isVisible()) {
+                        updateFrame.dispose();
+                    }
+                });
             } catch (SQLException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-
-            // Exibe uma mensagem na UI Thread após a tentativa
-            // Apenas para feedback inicial, a lógica de sucesso/falha pode ser mais
-            // elaborada
-            SwingUtilities.invokeLater(() -> {
-                // Poderia verificar um status retornado pelo syncService se necessário,
-                // mas por agora, os logs no console indicarão sucesso/falha da conexão.
-                // Para uma UI mais rica, o syncService.syncAllDataFromRemote() poderia retornar
-                // um booleano
-                // ou lançar uma exceção específica que você trataria aqui para mostrar um
-                // JOptionPane.
-                // Neste momento, vamos assumir que o usuário verificará os logs.
-                // Se você quiser um feedback visual imediato da tentativa de conexão:
-
-                Connection testConnection = syncService.connectToRemoteServer(this.ipAddress);
-                if (testConnection != null) {
-                    JOptionPane.showMessageDialog(this,
-                            "Tentativa de conexão com o servidor remoto (" + this.ipAddress
-                                    + ") iniciada. Verifique os logs para detalhes.",
-                            "Sincronização", JOptionPane.INFORMATION_MESSAGE);
-                    try {
-                        testConnection.close();
-                    } catch (SQLException ex) {
-                        /* ignore */ }
-                } else {
-                    JOptionPane
-                            .showMessageDialog(this,
-                                    "Falha ao iniciar conexão com o servidor remoto (" + this.ipAddress
-                                            + "). Verifique o IP e os logs.",
-                                    "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
-                }
-
-                // A linha abaixo é apenas um placeholder, você ajustaria conforme o feedback do
-                // syncService
-                JOptionPane.showMessageDialog(this,
-                        "Processo de verificação de atualizações com " + this.ipAddress
-                                + " disparado. Veja os logs para o status da conexão.",
-                        "Atualização", JOptionPane.INFORMATION_MESSAGE);
-            });
-
         }).start();
     }
 
@@ -336,7 +319,7 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 3, 9)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("checklist-intelbras-alpha-v0.0.2");
+        jLabel1.setText("checklist-intelbras-beta-v0.1.0");
 
         final javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
@@ -450,9 +433,9 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
 
         // menuSobre.setText("Sobre");
         // menuSobre.addActionListener(new java.awt.event.ActionListener() {
-        //     public void actionPerformed(final java.awt.event.ActionEvent evt) {
-        //         menuSobreActionPerformed(evt);
-        //     }
+        // public void actionPerformed(final java.awt.event.ActionEvent evt) {
+        // menuSobreActionPerformed(evt);
+        // }
         // });
 
         // menuHelp.add(menuSobre);
@@ -501,8 +484,9 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
         updateFrame.setVisible(true);
     }// GEN-LAST:event_menuCheckUpdateActionPerformed
 
-    // private void menuSobreActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSobreActionPerformed
-    //     // TODO add your handling code here:
+    // private void menuSobreActionPerformed(final java.awt.event.ActionEvent evt)
+    // {// GEN-FIRST:event_menuSobreActionPerformed
+    // // TODO add your handling code here:
     // }// GEN-LAST:event_menuSobreActionPerformed
 
     private void performLayoutAdjustments() {
