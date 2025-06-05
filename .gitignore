@@ -3,3 +3,41 @@
 
 # Ignore Gradle build output directory
 build
+
+*.class
+
+# Bytecode compilado
+*.class
+
+# Logs
+*.log
+
+# Diretórios de compilação comuns
+/bin/
+/build/
+/out/
+
+# Arquivos temporários de IDEs
+*.swp
+*.swo
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ
+.idea/
+*.iml
+
+# NetBeans
+/nbproject/private/
+/build/
+/dist/
+
+# VS Code
+.vscode/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
