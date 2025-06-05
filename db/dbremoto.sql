@@ -14,27 +14,27 @@ FLUSH PRIVILEGES;
 
 USE redes_db;
 
-CREATE TABLE Categorias (
+CREATE TABLE categorias (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB;
 
-CREATE TABLE Checklists (
+CREATE TABLE checklists (
     id INT PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     categoria_id INT NOT NULL,
-    FOREIGN KEY (categoria_id) REFERENCES Categorias(id)
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE ChecklistItens (
+CREATE TABLE checklist_itens (
     id INT PRIMARY KEY,
     checklist_id INT NOT NULL,
     texto VARCHAR(255) NOT NULL,
     ordem INT NOT NULL DEFAULT 0,
-    FOREIGN KEY (checklist_id) REFERENCES Checklists(id)
+    FOREIGN KEY (checklist_id) REFERENCES checklists(id)
 ) ENGINE=InnoDB;
 
-INSERT INTO Categorias (nome) VALUES
+INSERT INTO categorias (nome) VALUES
 ('Roteadores'),
 ('Wifi Empresarial'),
 ('Rádios Outdoor'),
@@ -42,7 +42,7 @@ INSERT INTO Categorias (nome) VALUES
 ('Switches'),
 ('Redes 5G');
 
-INSERT INTO Checklists (id, titulo, categoria_id) VALUES
+INSERT INTO checklists (id, titulo, categoria_id) VALUES
 (101, 'Instalação Básica', 1),
 (102, 'Configuração de Segurança', 1),
 (201, 'Instalação Access Point', 2),
@@ -56,7 +56,7 @@ INSERT INTO Checklists (id, titulo, categoria_id) VALUES
 (601, 'Análise de Cobertura 5G', 6),
 (602, 'Teste de Throughput', 6);
 
-INSERT INTO ChecklistItens (id, checklist_id, texto, ordem) VALUES
+INSERT INTO checklist_itens (id, checklist_id, texto, ordem) VALUES
 (1001, 101, 'Verificar fonte de alimentação', 1),
 (1002, 101, 'Conectar cabos corretamente', 2),
 (1003, 101, 'Testar acesso à interface web', 3),
