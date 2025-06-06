@@ -17,6 +17,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -123,6 +124,7 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
     private javax.swing.JTabbedPane tabbedPane;
 
     private javax.swing.JLabel titulo;
+    private ImageIcon mainIcon;
     private javax.swing.JButton toggleSidebarButton;
 
     // End of variables declaration//GEN-END:variables
@@ -137,6 +139,10 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
         setLocationRelativeTo(null);
 
         configurarBotoesArredondados();
+        final ClassLoader classLoader = MainWindow.class.getClassLoader();
+        this.mainIcon = new ImageIcon(classLoader.getResource("checklist.png"));
+        this.setIconImage(this.mainIcon.getImage());
+        // definirIconeDaAplicacao(); // A chamada permanece aqui
     }
 
     public void onProfileCreated(String ipAddress) {
@@ -319,7 +325,7 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 3, 9)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("checklist-intelbras-beta-v0.1.0");
+        jLabel1.setText("checklist-intelbras-v1.0.0");
 
         final javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
