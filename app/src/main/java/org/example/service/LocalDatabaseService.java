@@ -239,7 +239,9 @@ public class LocalDatabaseService {
 
     // Retorna uma nova conexão com o banco local
     private Connection conectar() throws SQLException {
-        final String dbPath = System.getProperty("user.dir") + "/db/dblocal.db";
+        // final String dbPath = System.getProperty("user.dir") + "/db/dblocal.db";
+        final String dbPath = System.getenv("APPDATA") + "/ChecklistApp/db/dblocal.db";
+
         // System.out.println("Tentando conectar ao banco em: " + dbPath);
 
         final File dbFile = new File(dbPath);

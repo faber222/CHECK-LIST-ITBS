@@ -325,7 +325,7 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 3, 9)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("checklist-intelbras-v1.0.0");
+        jLabel1.setText("checklist-intelbras-v1.1.0");
 
         final javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
