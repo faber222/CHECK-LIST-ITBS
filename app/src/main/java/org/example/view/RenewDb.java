@@ -13,10 +13,9 @@ import org.example.controller.RenewDbListener;
 public class RenewDb extends javax.swing.JFrame {
 
     private RenewDbListener listener;
-    private javax.swing.JTextPane ipTextPane;
+    private javax.swing.JTextField ipTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton okButton;
 
     /**
@@ -39,8 +38,7 @@ public class RenewDb extends javax.swing.JFrame {
     private void initComponents() {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        ipTextPane = new javax.swing.JTextPane();
+        ipTextField = new javax.swing.JTextField();
         okButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -49,8 +47,6 @@ public class RenewDb extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         jLabel1.setText("IP DO SERVIDOR: ");
-
-        jScrollPane1.setViewportView(ipTextPane);
 
         okButton.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         okButton.setText("Ok");
@@ -63,6 +59,8 @@ public class RenewDb extends javax.swing.JFrame {
                 }
             }
         );
+        
+        ipTextField.addActionListener(evt -> okButton.doClick());
 
         final javax.swing.GroupLayout jPanel1Layout =
             new javax.swing.GroupLayout(jPanel1);
@@ -86,7 +84,7 @@ public class RenewDb extends javax.swing.JFrame {
                                         .addComponent(jLabel1)
                                         .addGap(18, 18, 18)
                                         .addComponent(
-                                            jScrollPane1,
+                                            ipTextField,
                                             javax.swing.GroupLayout.PREFERRED_SIZE,
                                             160,
                                             javax.swing.GroupLayout.PREFERRED_SIZE
@@ -112,7 +110,7 @@ public class RenewDb extends javax.swing.JFrame {
                                     javax.swing.GroupLayout.Alignment.TRAILING
                                 )
                                 .addComponent(
-                                    jScrollPane1,
+                                    ipTextField,
                                     javax.swing.GroupLayout.PREFERRED_SIZE,
                                     javax.swing.GroupLayout.DEFAULT_SIZE,
                                     javax.swing.GroupLayout.PREFERRED_SIZE
@@ -159,7 +157,7 @@ public class RenewDb extends javax.swing.JFrame {
     }
 
     private void okButtonActionPerformed(final java.awt.event.ActionEvent evt) {
-        final String ip = ipTextPane.getText();
+        final String ip = ipTextField.getText();
         if (listener != null) {
             listener.onProfileCreated(ip);
             this.dispose(); // Fecha o JFrame

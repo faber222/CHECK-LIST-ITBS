@@ -41,6 +41,8 @@ public class MainWindow
     extends JFrame
     implements SidebarListener, RenewDbListener {
 
+    private static final String version = "checklist-intelbras-v1.1.1";
+
     /**
      * @param args the command line arguments
      */
@@ -116,7 +118,7 @@ public class MainWindow
             this,
             "Iniciando sincronização com o servidor: " +
             this.ipAddress +
-            ".\nPor favor, aguarde...",
+            ".\nClique em Ok para continuar...",
             "Sincronização em Progresso",
             JOptionPane.INFORMATION_MESSAGE
         );
@@ -284,7 +286,7 @@ public class MainWindow
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 3, 9)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("checklist-intelbras-v1.1.0");
+        jLabel1.setText(version);
 
         final javax.swing.GroupLayout sidePanelLayout =
             new javax.swing.GroupLayout(sidePanel);
