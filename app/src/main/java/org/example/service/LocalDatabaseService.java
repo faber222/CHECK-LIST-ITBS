@@ -9,31 +9,31 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.example.model.Categorias;
 import org.example.model.Checklist;
 import org.example.model.ChecklistItens;
 
 public class LocalDatabaseService {
 
-    private static final String DB_URL = "jdbc:sqlite:../db/dblocal.db";
+    private static final String DB_URL =
+        System.getenv("APPDATA") + "/ChecklistApp/db/dblocal.db";
 
     // para botões laterais
     public List<Categorias> listarCategorias() {
         final List<Categorias> categorias = new ArrayList<>();
         final String sql = "SELECT id, nome FROM categorias ORDER BY id ASC";
 
-        try (Connection conn = conectar();
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery()) {
-
+        try (
+            Connection conn = conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()
+        ) {
             while (rs.next()) {
                 final Categorias categoria = new Categorias();
                 categoria.setId(rs.getInt("id"));
                 categoria.setNome(rs.getString("nome"));
                 categorias.add(categoria);
             }
-
         } catch (final SQLException e) {
             System.err.println("Erro ao listar categorias: " + e.getMessage());
         }
@@ -44,11 +44,13 @@ public class LocalDatabaseService {
     // para preencher a jList do painel direito
     public List<Checklist> listarChecklistsPorCategoria(final int categoriaId) {
         final List<Checklist> checklists = new ArrayList<>();
-        final String sql = "SELECT id, titulo, categoria_id FROM checklists WHERE categoria_id = ? ORDER BY titulo ASC";
+        final String sql =
+            "SELECT id, titulo, categoria_id FROM checklists WHERE categoria_id = ? ORDER BY titulo ASC";
 
-        try (Connection conn = conectar();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (
+            Connection conn = conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
             stmt.setInt(1, categoriaId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -59,7 +61,6 @@ public class LocalDatabaseService {
                     checklists.add(checklist);
                 }
             }
-
         } catch (final SQLException e) {
             System.err.println("Erro ao listar checklists: " + e.getMessage());
         }
@@ -70,11 +71,13 @@ public class LocalDatabaseService {
     // para montar o conteúdo do JCheckBoxes
     public List<ChecklistItens> listarItensPorChecklist(final int checklistId) {
         final List<ChecklistItens> itens = new ArrayList<>();
-        final String sql = "SELECT id, checklist_id, texto, ordem FROM checklist_itens WHERE checklist_id = ? ORDER BY ordem ASC";
+        final String sql =
+            "SELECT id, checklist_id, texto, ordem FROM checklist_itens WHERE checklist_id = ? ORDER BY ordem ASC";
 
-        try (Connection conn = conectar();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (
+            Connection conn = conectar();
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
             stmt.setInt(1, checklistId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -86,9 +89,10 @@ public class LocalDatabaseService {
                     itens.add(item);
                 }
             }
-
         } catch (final SQLException e) {
-            System.err.println("Erro ao listar itens do checklist: " + e.getMessage());
+            System.err.println(
+                "Erro ao listar itens do checklist: " + e.getMessage()
+            );
         }
 
         return itens;
@@ -99,7 +103,11 @@ public class LocalDatabaseService {
      * A ordem é importante para respeitar as chaves estrangeiras.
      */
     public void limparTodasAsTabelas() throws SQLException {
-        String[] tabelasParaLimpar = { "checklist_itens", "checklists", "categorias" };
+        String[] tabelasParaLimpar = {
+            "checklist_itens",
+            "checklists",
+            "categorias",
+        };
 
         try (Connection conn = conectar()) {
             // Desabilitar chaves estrangeiras temporariamente para facilitar a limpeza
@@ -118,9 +126,10 @@ public class LocalDatabaseService {
             }
             conn.commit(); // Commit da transação
             System.out.println("Todas as tabelas locais foram limpas.");
-
         } catch (SQLException e) {
-            System.err.println("Erro ao limpar tabelas locais: " + e.getMessage());
+            System.err.println(
+                "Erro ao limpar tabelas locais: " + e.getMessage()
+            );
             // Se houver erro, tentar rollback (embora com foreign_keys=OFF,
             // o commit pode já ter acontecido parcialmente dependendo do SQLite)
             // Com autoCommit=false, o rollback deve funcionar melhor.
@@ -132,10 +141,15 @@ public class LocalDatabaseService {
             throw e; // Re-lança a exceção para ser tratada pelo chamador
         } finally {
             // Reabilitar chaves estrangeiras
-            try (Connection conn = conectar(); Statement stmt = conn.createStatement()) {
+            try (
+                Connection conn = conectar();
+                Statement stmt = conn.createStatement()
+            ) {
                 stmt.execute("PRAGMA foreign_keys = ON;");
             } catch (SQLException ex) {
-                System.err.println("Erro ao reabilitar chaves estrangeiras: " + ex.getMessage());
+                System.err.println(
+                    "Erro ao reabilitar chaves estrangeiras: " + ex.getMessage()
+                );
             }
         }
     }
@@ -145,11 +159,13 @@ public class LocalDatabaseService {
      *
      * @param categorias A lista de categorias a ser inserida.
      */
-    public void inserirCategoriasEmLote(List<Categorias> categorias) throws SQLException {
+    public void inserirCategoriasEmLote(List<Categorias> categorias)
+        throws SQLException {
         String sql = "INSERT INTO categorias (id, nome) VALUES (?, ?)";
-        try (Connection conn = conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
+        try (
+            Connection conn = conectar();
+            PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
             conn.setAutoCommit(false); // Iniciar transação
 
             for (Categorias categoria : categorias) {
@@ -159,10 +175,14 @@ public class LocalDatabaseService {
             }
             pstmt.executeBatch();
             conn.commit(); // Commit da transação
-            System.out.println(categorias.size() + " categorias inseridas no banco local.");
-
+            System.out.println(
+                categorias.size() + " categorias inseridas no banco local."
+            );
         } catch (SQLException e) {
-            System.err.println("Erro ao inserir categorias em lote no banco local: " + e.getMessage());
+            System.err.println(
+                "Erro ao inserir categorias em lote no banco local: " +
+                e.getMessage()
+            );
             // Tentar rollback em caso de erro
             Connection conn = conectar();
             if (conn != null) {
@@ -177,11 +197,14 @@ public class LocalDatabaseService {
      *
      * @param checklists A lista de checklists a ser inserida.
      */
-    public void inserirChecklistsEmLote(List<Checklist> checklists) throws SQLException {
-        String sql = "INSERT INTO checklists (id, titulo, categoria_id) VALUES (?, ?, ?)";
-        try (Connection conn = conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
+    public void inserirChecklistsEmLote(List<Checklist> checklists)
+        throws SQLException {
+        String sql =
+            "INSERT INTO checklists (id, titulo, categoria_id) VALUES (?, ?, ?)";
+        try (
+            Connection conn = conectar();
+            PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
             conn.setAutoCommit(false);
 
             for (Checklist checklist : checklists) {
@@ -192,10 +215,14 @@ public class LocalDatabaseService {
             }
             pstmt.executeBatch();
             conn.commit();
-            System.out.println(checklists.size() + " checklists inseridos no banco local.");
-
+            System.out.println(
+                checklists.size() + " checklists inseridos no banco local."
+            );
         } catch (SQLException e) {
-            System.err.println("Erro ao inserir checklists em lote no banco local: " + e.getMessage());
+            System.err.println(
+                "Erro ao inserir checklists em lote no banco local: " +
+                e.getMessage()
+            );
             Connection conn = conectar();
             if (conn != null) {
                 conn.rollback();
@@ -209,11 +236,14 @@ public class LocalDatabaseService {
      *
      * @param itens A lista de itens a ser inserida.
      */
-    public void inserirChecklistItensEmLote(List<ChecklistItens> itens) throws SQLException {
-        String sql = "INSERT INTO checklist_itens (id, checklist_id, texto, ordem) VALUES (?, ?, ?, ?)";
-        try (Connection conn = conectar();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
+    public void inserirChecklistItensEmLote(List<ChecklistItens> itens)
+        throws SQLException {
+        String sql =
+            "INSERT INTO checklist_itens (id, checklist_id, texto, ordem) VALUES (?, ?, ?, ?)";
+        try (
+            Connection conn = conectar();
+            PreparedStatement pstmt = conn.prepareStatement(sql)
+        ) {
             conn.setAutoCommit(false);
 
             for (ChecklistItens item : itens) {
@@ -225,10 +255,14 @@ public class LocalDatabaseService {
             }
             pstmt.executeBatch();
             conn.commit();
-            System.out.println(itens.size() + " itens de checklist inseridos no banco local.");
-
+            System.out.println(
+                itens.size() + " itens de checklist inseridos no banco local."
+            );
         } catch (SQLException e) {
-            System.err.println("Erro ao inserir itens de checklist em lote no banco local: " + e.getMessage());
+            System.err.println(
+                "Erro ao inserir itens de checklist em lote no banco local: " +
+                e.getMessage()
+            );
             Connection conn = conectar();
             if (conn != null) {
                 conn.rollback();
@@ -239,18 +273,13 @@ public class LocalDatabaseService {
 
     // Retorna uma nova conexão com o banco local
     private Connection conectar() throws SQLException {
-        // final String dbPath = System.getProperty("user.dir") + "/db/dblocal.db";
-        final String dbPath = System.getenv("APPDATA") + "/ChecklistApp/db/dblocal.db";
-
-        // System.out.println("Tentando conectar ao banco em: " + dbPath);
-
-        final File dbFile = new File(dbPath);
+        final File dbFile = new File(DB_URL);
         if (!dbFile.exists()) {
-            throw new SQLException("Arquivo do banco de dados não encontrado em: " + dbPath);
+            throw new SQLException(
+                "Arquivo do banco de dados não encontrado em: " + DB_URL
+            );
         }
 
-        return DriverManager.getConnection("jdbc:sqlite:" + dbPath);
-        // return DriverManager.getConnection(DB_URL);
+        return DriverManager.getConnection("jdbc:sqlite:" + DB_URL);
     }
-
 }

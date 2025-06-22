@@ -13,7 +13,6 @@ import java.awt.Frame;
 import java.awt.Insets;
 import java.sql.SQLException;
 import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,7 +26,6 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-
 import org.example.App;
 import org.example.controller.RenewDbListener;
 import org.example.controller.SidebarListener;
@@ -39,100 +37,52 @@ import org.example.service.RemoteSyncService;
  *
  * @author faber222
  */
-public class MainWindow extends JFrame implements SidebarListener, RenewDbListener {
+public class MainWindow
+    extends JFrame
+    implements SidebarListener, RenewDbListener {
 
     /**
      * @param args the command line arguments
      */
     public static void main(final String args[]) {
-        /* Set the Nimbus look and feel */
-        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-        // (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-         * look and feel.
-         * For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        // try {
-        // for (javax.swing.UIManager.LookAndFeelInfo info :
-        // javax.swing.UIManager.getInstalledLookAndFeels()) {
-        // if ("Nimbus".equals(info.getName())) {
-        // javax.swing.UIManager.setLookAndFeel(info.getClassName());
-        // break;
-        // }
-        // }
-        // } catch (ClassNotFoundException ex) {
-        // java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE,
-        // null, ex);
-        // } catch (InstantiationException ex) {
-        // java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE,
-        // null, ex);
-        // } catch (IllegalAccessException ex) {
-        // java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE,
-        // null, ex);
-        // } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-        // java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE,
-        // null, ex);
-        // }
-        // </editor-fold>
-
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new MainWindow().setVisible(true);
+        SwingUtilities.invokeLater(
+            new Runnable() {
+                public void run() {
+                    new MainWindow().setVisible(true);
+                }
             }
-        });
+        );
     }
 
     private boolean isSidebarExpanded = true;
     private final int COLLAPSED_WIDTH = 40;
     private final int EXPANDED_WIDTH = 213;
-    private JPanel buttonsPanel; // Novo painel para botões dinâmicos
+    private JPanel buttonsPanel;
     private final LocalDatabaseService dbService;
     private JScrollPane buttonsScrollPane;
     private RenewDb updateFrame;
-
     private String ipAddress;
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel contentPanel;
-
     private javax.swing.JLabel jLabel1;
-
     private javax.swing.JSeparator jSeparator;
-
     private javax.swing.JPanel mainPanel;
-
     private javax.swing.JMenuBar menuBar;
-
     private javax.swing.JMenuItem menuCheckUpdate;
-
     private javax.swing.JMenu menuEdit;
-
     private javax.swing.JMenu menuFile;
-
     private javax.swing.JMenu menuHelp;
-
     private javax.swing.JMenuItem menuSair;
-
-    private javax.swing.JMenuItem menuSobre;
-
     private javax.swing.JMenuItem menuTema;
-
     private javax.swing.JPanel sidePanel;
-
     private javax.swing.JTabbedPane tabbedPane;
-
     private javax.swing.JLabel titulo;
-    private ImageIcon mainIcon;
+    private final ImageIcon mainIcon;
     private javax.swing.JButton toggleSidebarButton;
 
-    // End of variables declaration//GEN-END:variables
     /**
      * Creates new form SlaveMDIFrame
      */
     public MainWindow() {
-
         initComponents();
         dbService = new LocalDatabaseService();
         sidePanel.setBackground(new Color(0, 163, 53));
@@ -145,54 +95,71 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
         // definirIconeDaAplicacao(); // A chamada permanece aqui
     }
 
-    public void onProfileCreated(String ipAddress) {
+    public void onProfileCreated(final String ipAddress) {
         this.ipAddress = ipAddress;
-        System.out.println("IP do servidor remoto recebido na MainWindow: " + this.ipAddress);
+        System.out.println(
+            "IP do servidor remoto recebido na MainWindow: " + this.ipAddress
+        );
 
         if (this.ipAddress == null || this.ipAddress.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "O endereço IP não pode ser vazio.", "Erro de IP",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                this,
+                "O endereço IP não pode ser vazio.",
+                "Erro de IP",
+                JOptionPane.ERROR_MESSAGE
+            );
             return;
         }
 
-        // Instancia e usa o RemoteSyncService
-
         // Mostra uma mensagem de que o processo iniciou
-        JOptionPane.showMessageDialog(this,
-                "Iniciando sincronização com o servidor: " + this.ipAddress + ".\nPor favor, aguarde...",
-                "Sincronização em Progresso",
-                JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(
+            this,
+            "Iniciando sincronização com o servidor: " +
+            this.ipAddress +
+            ".\nPor favor, aguarde...",
+            "Sincronização em Progresso",
+            JOptionPane.INFORMATION_MESSAGE
+        );
         new Thread(() -> {
-            RemoteSyncService syncService = new RemoteSyncService();
+            final RemoteSyncService syncService = new RemoteSyncService();
             try {
-                boolean sucesso = syncService.syncAllDataFromRemote(this.ipAddress);
+                final boolean sucesso = syncService.syncAllDataFromRemote(
+                    this.ipAddress
+                );
                 // Exibe uma mensagem na UI Thread após a tentativa
                 SwingUtilities.invokeLater(() -> {
                     if (sucesso) {
-                        JOptionPane.showMessageDialog(this,
-                                "Sincronização com o servidor remoto (" + this.ipAddress
-                                        + ") concluída com sucesso!\nO banco de dados local foi atualizado!",
-                                "Sincronização Concluída",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(
+                            this,
+                            "Sincronização com o servidor remoto (" +
+                            this.ipAddress +
+                            ") concluída com sucesso!\nO banco de dados local foi atualizado!",
+                            "Sincronização Concluída",
+                            JOptionPane.INFORMATION_MESSAGE
+                        );
 
                         // Atualizar a interface gráfica
-                        System.out.println("Recarregando botões da sidebar e limpando abas...");
+                        System.out.println(
+                            "Recarregando botões da sidebar e limpando abas..."
+                        );
                         tabbedPane.removeAll(); // Remove todas as abas abertas
                         loadCategoryButtons(); // Recarrega os botões da categoria na sidebar
-
                     } else {
-                        JOptionPane.showMessageDialog(this,
-                                "Falha na sincronização com o servidor remoto (" + this.ipAddress
-                                        + ").\nVerifique o endereço IP, a conexão com a internet e os logs do console para mais detalhes.",
-                                "Erro de Sincronização",
-                                JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(
+                            this,
+                            "Falha na sincronização com o servidor remoto (" +
+                            this.ipAddress +
+                            ").\nVerifique o endereço IP, a conexão com a internet e os logs do console para mais detalhes.",
+                            "Erro de Sincronização",
+                            JOptionPane.ERROR_MESSAGE
+                        );
                     }
                     // Se o updateFrame (RenewDb) ainda estiver visível, você pode fechá-lo aqui
                     if (updateFrame != null && updateFrame.isVisible()) {
                         updateFrame.dispose();
                     }
                 });
-            } catch (SQLException e) {
+            } catch (final SQLException e) {
                 e.printStackTrace();
             }
         }).start();
@@ -201,19 +168,23 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
     public void start() {
         loadCategoryButtons(); // Carrega botões ao iniciar
         setVisible(true);
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                performLayoutAdjustments();
+        SwingUtilities.invokeLater(
+            new Runnable() {
+                public void run() {
+                    performLayoutAdjustments();
+                }
             }
-        });
+        );
     }
 
     @Override
     public void onCategorySelected(final Categorias category) {
-        final ChecklistViewer newPane = new ChecklistViewer(category, dbService);
+        final ChecklistViewer newPane = new ChecklistViewer(
+            category,
+            dbService
+        );
 
         // Adiciona a nova aba
-        // tabbedPane.addTab(category, pane);
         tabbedPane.addTab(category.getNome(), newPane);
 
         // Cria o painel com o título e botão de fechar
@@ -227,7 +198,6 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
         close.setBorderPainted(false);
         close.setMargin(new Insets(0, 5, 0, 5));
         close.addActionListener(e -> {
-            // int index = tabbedPane.indexOfComponent(pane);
             final int index = tabbedPane.indexOfComponent(newPane);
             if (index != -1) {
                 tabbedPane.remove(index);
@@ -237,9 +207,7 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
         aba.add(label);
         aba.add(close);
 
-        // tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(pane), aba);
         tabbedPane.setTabComponentAt(tabbedPane.indexOfComponent(newPane), aba);
-        // tabbedPane.setSelectedComponent(pane);
         tabbedPane.setSelectedComponent(newPane);
     }
 
@@ -249,24 +217,7 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
      * regenerated by the Form Editor.
      */
     @SuppressWarnings({ "Convert2Lambda" })
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         mainPanel = new javax.swing.JPanel();
         sidePanel = new javax.swing.JPanel();
         toggleSidebarButton = new javax.swing.JButton();
@@ -282,19 +233,22 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
         menuTema = new javax.swing.JMenuItem();
         menuHelp = new javax.swing.JMenu();
         menuCheckUpdate = new javax.swing.JMenuItem();
-        menuSobre = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CHECK-LIST-INTELBRAS");
         titulo.setBackground(new java.awt.Color(62, 80, 85));
 
         toggleSidebarButton.setText("<");
-        toggleSidebarButton.addActionListener(new java.awt.event.ActionListener() {
-            @SuppressWarnings("override")
-            public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                toggleSidebarButtonActionPerformed(evt);
+        toggleSidebarButton.addActionListener(
+            new java.awt.event.ActionListener() {
+                @SuppressWarnings("override")
+                public void actionPerformed(
+                    final java.awt.event.ActionEvent evt
+                ) {
+                    toggleSidebarButtonActionPerformed(evt);
+                }
             }
-        });
+        );
 
         titulo.setBackground(new java.awt.Color(62, 80, 85));
         titulo.setText("<html><center>CHECK-LIST<br>INTELBRAS</center></html>");
@@ -311,104 +265,217 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
         buttonsScrollPane = new JScrollPane(buttonsPanel);
         buttonsScrollPane.getVerticalScrollBar().setName("sidebarScrollBar");
         buttonsScrollPane.setBorder(null);
-        buttonsScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        buttonsScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        buttonsScrollPane.setHorizontalScrollBarPolicy(
+            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        );
+        buttonsScrollPane.setVerticalScrollBarPolicy(
+            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+        );
         buttonsScrollPane.getViewport().setOpaque(false); // Tenta herdar do JScrollPane
         buttonsScrollPane.setOpaque(false); // Tenta herdar do sidePanel (que é verde)
-        buttonsScrollPane.setPreferredSize(new Dimension(EXPANDED_WIDTH - 20, 400));
-        buttonsScrollPane.setMaximumSize(new Dimension(EXPANDED_WIDTH - 20, Integer.MAX_VALUE));
+        buttonsScrollPane.setPreferredSize(
+            new Dimension(EXPANDED_WIDTH - 20, 400)
+        );
+        buttonsScrollPane.setMaximumSize(
+            new Dimension(EXPANDED_WIDTH - 20, Integer.MAX_VALUE)
+        );
         buttonsScrollPane.setBorder(BorderFactory.createEmptyBorder());
         buttonsScrollPane.setViewportBorder(null);
-
-        // buttonsScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0,
-        // 0));
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 3, 9)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("checklist-intelbras-v1.1.0");
 
-        final javax.swing.GroupLayout sidePanelLayout = new javax.swing.GroupLayout(sidePanel);
+        final javax.swing.GroupLayout sidePanelLayout =
+            new javax.swing.GroupLayout(sidePanel);
         sidePanel.setLayout(sidePanelLayout);
         sidePanelLayout.setHorizontalGroup(
-                sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(sidePanelLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(buttonsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jSeparator, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(sidePanelLayout.createSequentialGroup()
-                                                .addGap(0, 0, Short.MAX_VALUE)
-                                                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 166,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(toggleSidebarButton))
-                                        .addGroup(sidePanelLayout.createSequentialGroup()
-                                                .addComponent(jLabel1)
-                                                .addGap(0, 0, Short.MAX_VALUE)))
-                                .addContainerGap()));
-        sidePanelLayout.setVerticalGroup(
-                sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(sidePanelLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            sidePanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    sidePanelLayout
+                        .createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(
+                            sidePanelLayout
+                                .createParallelGroup(
+                                    javax.swing.GroupLayout.Alignment.LEADING
+                                )
+                                .addComponent(
+                                    buttonsScrollPane,
+                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                                    Short.MAX_VALUE
+                                )
+                                .addComponent(
+                                    jSeparator,
+                                    javax.swing.GroupLayout.Alignment.TRAILING
+                                )
+                                .addGroup(
+                                    sidePanelLayout
+                                        .createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(
+                                            titulo,
+                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                            166,
+                                            javax.swing.GroupLayout.PREFERRED_SIZE
+                                        )
+                                        .addPreferredGap(
+                                            javax.swing.LayoutStyle.ComponentPlacement.RELATED
+                                        )
                                         .addComponent(toggleSidebarButton)
-                                        .addGroup(sidePanelLayout.createSequentialGroup()
-                                                .addGap(4, 4, 4)
-                                                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 47,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 16,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(buttonsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177,
-                                        Short.MAX_VALUE)
-                                .addComponent(jLabel1)
-                                .addContainerGap()));
+                                )
+                                .addGroup(
+                                    sidePanelLayout
+                                        .createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                )
+                        )
+                        .addContainerGap()
+                )
+        );
+        sidePanelLayout.setVerticalGroup(
+            sidePanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    sidePanelLayout
+                        .createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(
+                            sidePanelLayout
+                                .createParallelGroup(
+                                    javax.swing.GroupLayout.Alignment.LEADING
+                                )
+                                .addComponent(toggleSidebarButton)
+                                .addGroup(
+                                    sidePanelLayout
+                                        .createSequentialGroup()
+                                        .addGap(4, 4, 4)
+                                        .addComponent(
+                                            titulo,
+                                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                                            47,
+                                            javax.swing.GroupLayout.PREFERRED_SIZE
+                                        )
+                                )
+                        )
+                        .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED
+                        )
+                        .addComponent(
+                            jSeparator,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            16,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.UNRELATED
+                        )
+                        .addComponent(
+                            buttonsScrollPane,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                            177,
+                            Short.MAX_VALUE
+                        )
+                        .addComponent(jLabel1)
+                        .addContainerGap()
+                )
+        );
 
         contentPanel.setPreferredSize(new java.awt.Dimension(800, 0));
 
-        final javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
+        final javax.swing.GroupLayout contentPanelLayout =
+            new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
         contentPanelLayout.setHorizontalGroup(
-                contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(contentPanelLayout.createSequentialGroup()
-                                .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 913, Short.MAX_VALUE)
-                                .addContainerGap()));
+            contentPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    contentPanelLayout
+                        .createSequentialGroup()
+                        .addComponent(
+                            tabbedPane,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            913,
+                            Short.MAX_VALUE
+                        )
+                        .addContainerGap()
+                )
+        );
         contentPanelLayout.setVerticalGroup(
-                contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(contentPanelLayout.createSequentialGroup()
-                                .addComponent(tabbedPane)
-                                .addContainerGap()));
+            contentPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    contentPanelLayout
+                        .createSequentialGroup()
+                        .addComponent(tabbedPane)
+                        .addContainerGap()
+                )
+        );
 
-        final javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        final javax.swing.GroupLayout mainPanelLayout =
+            new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
-                mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addComponent(sidePanel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 919,
-                                        Short.MAX_VALUE)));
+            mainPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(
+                    mainPanelLayout
+                        .createSequentialGroup()
+                        .addComponent(
+                            sidePanel,
+                            javax.swing.GroupLayout.PREFERRED_SIZE,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            javax.swing.GroupLayout.PREFERRED_SIZE
+                        )
+                        .addPreferredGap(
+                            javax.swing.LayoutStyle.ComponentPlacement.RELATED
+                        )
+                        .addComponent(
+                            contentPanel,
+                            javax.swing.GroupLayout.DEFAULT_SIZE,
+                            919,
+                            Short.MAX_VALUE
+                        )
+                )
+        );
         mainPanelLayout.setVerticalGroup(
-                mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(sidePanel, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE));
+            mainPanelLayout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(
+                    sidePanel,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE
+                )
+                .addComponent(
+                    contentPanel,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    586,
+                    Short.MAX_VALUE
+                )
+        );
 
         menuFile.setText("File");
         menuFile.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
 
         menuSair.setText("Sair");
-        menuSair.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                menuSairActionPerformed(evt);
+        menuSair.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(
+                    final java.awt.event.ActionEvent evt
+                ) {
+                    menuSairActionPerformed(evt);
+                }
             }
-        });
+        );
         menuFile.add(menuSair);
 
         menuBar.add(menuFile);
@@ -417,11 +484,15 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
         menuEdit.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
 
         menuTema.setText("Tema");
-        menuTema.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                menuTemaActionPerformed(evt);
+        menuTema.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(
+                    final java.awt.event.ActionEvent evt
+                ) {
+                    menuTemaActionPerformed(evt);
+                }
             }
-        });
+        );
         menuEdit.add(menuTema);
 
         menuBar.add(menuEdit);
@@ -430,75 +501,94 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
         menuHelp.setFont(new java.awt.Font("SansSerif", 0, 13)); // NOI18N
 
         menuCheckUpdate.setText("Verificar Sobre Atualizações");
-        menuCheckUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                menuCheckUpdateActionPerformed(evt);
+        menuCheckUpdate.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(
+                    final java.awt.event.ActionEvent evt
+                ) {
+                    menuCheckUpdateActionPerformed(evt);
+                }
             }
-        });
+        );
         menuHelp.add(menuCheckUpdate);
-
-        // menuSobre.setText("Sobre");
-        // menuSobre.addActionListener(new java.awt.event.ActionListener() {
-        // public void actionPerformed(final java.awt.event.ActionEvent evt) {
-        // menuSobreActionPerformed(evt);
-        // }
-        // });
-
-        // menuHelp.add(menuSobre);
         menuBar.add(menuHelp);
 
         setJMenuBar(menuBar);
 
-        final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        final javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
+            getContentPane()
+        );
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(
+                    mainPanel,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE
+                )
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+            layout
+                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(
+                    mainPanel,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    javax.swing.GroupLayout.DEFAULT_SIZE,
+                    Short.MAX_VALUE
+                )
+        );
         pack();
-        mainPanel.addComponentListener(new java.awt.event.ComponentAdapter() {
-            @Override
-            public void componentResized(final java.awt.event.ComponentEvent e) {
-                performLayoutAdjustments();
+        mainPanel.addComponentListener(
+            new java.awt.event.ComponentAdapter() {
+                @Override
+                public void componentResized(
+                    final java.awt.event.ComponentEvent e
+                ) {
+                    performLayoutAdjustments();
+                }
+
+                @Override
+                public void componentShown(
+                    final java.awt.event.ComponentEvent e
+                ) {
+                    performLayoutAdjustments();
+                }
+
+                @Override
+                public void componentMoved(
+                    final java.awt.event.ComponentEvent e
+                ) {
+                    performLayoutAdjustments();
+                }
             }
+        );
+    }
 
-            @Override
-            public void componentShown(final java.awt.event.ComponentEvent e) {
-                performLayoutAdjustments();
-            }
-
-            @Override
-            public void componentMoved(final java.awt.event.ComponentEvent e) {
-                performLayoutAdjustments();
-            }
-        });
-
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void menuTemaActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuTemaActionPerformed
+    private void menuTemaActionPerformed(final java.awt.event.ActionEvent evt) {
         App.atualizarTemaGlobal(!App.isDarkMode());
         atualizarUI();
-    }// GEN-LAST:event_menuTemaActionPerformed
+    }
 
-    private void menuCheckUpdateActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuCheckUpdateActionPerformed
+    private void menuCheckUpdateActionPerformed(
+        final java.awt.event.ActionEvent evt
+    ) {
         updateFrame = new RenewDb();
         updateFrame.setListener(this);
         updateFrame.setVisible(true);
-    }// GEN-LAST:event_menuCheckUpdateActionPerformed
-
-    // private void menuSobreActionPerformed(final java.awt.event.ActionEvent evt)
-    // {// GEN-FIRST:event_menuSobreActionPerformed
-    // // TODO add your handling code here:
-    // }// GEN-LAST:event_menuSobreActionPerformed
+    }
 
     private void performLayoutAdjustments() {
         // Adicionado para evitar NullPointerException se chamado muito cedo
-        if (mainPanel == null || sidePanel == null || titulo == null || jSeparator == null || jLabel1 == null
-                || buttonsScrollPane == null) {
+        if (
+            mainPanel == null ||
+            sidePanel == null ||
+            titulo == null ||
+            jSeparator == null ||
+            jLabel1 == null ||
+            buttonsScrollPane == null
+        ) {
             return;
         }
 
@@ -535,17 +625,17 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
                 alturaPainelLateral = mainPanel.getHeight();
             }
 
-            final int alturaCalculada = alturaPainelLateral
-                    - alturaTituloRow
-                    - alturaSeparador
-                    - alturaLabelVersao
-                    - MARGEM_SEGURANCA_GAPS;
+            final int alturaCalculada =
+                alturaPainelLateral -
+                alturaTituloRow -
+                alturaSeparador -
+                alturaLabelVersao -
+                MARGEM_SEGURANCA_GAPS;
 
             targetScrollPaneHeight = Math.max(0, alturaCalculada); // Garante que não seja negativo
 
             // A largura do conteúdo do JScrollPane
             currentScrollPaneWidth = EXPANDED_WIDTH - 20; // Como definido na inicialização do JScrollPane
-
         } else { // Sidebar está recolhida
             // Quando recolhida, o buttonsPanel (conteúdo) está invisível.
             // O JScrollPane em si pode ter uma largura mínima.
@@ -555,9 +645,6 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
             // sidePanel,
             // já que o conteúdo (buttonsPanel) está invisível.
             // Manter o cálculo similar ao expandido, mas com largura recolhida.
-            final int alturaTituloRow = 0; // titulo não está visível
-            final int alturaSeparador = 0; // jSeparator não está visível
-
             int alturaLabelVersao = 0;
             if (jLabel1.isVisible()) { // jLabel1 (versão) pode ainda estar visível
                 alturaLabelVersao = jLabel1.getPreferredSize().height;
@@ -572,30 +659,39 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
             // buttonsPanel também está invisível.
             // Então, o buttonsScrollPane pode ocupar a altura disponível menos o jLabel1 e
             // margens.
-            targetScrollPaneHeight = Math.max(0, alturaPainelLateral - alturaLabelVersao - MARGEM_SEGURANCA_GAPS);
+            targetScrollPaneHeight = Math.max(
+                0,
+                alturaPainelLateral - alturaLabelVersao - MARGEM_SEGURANCA_GAPS
+            );
         }
 
-        final Dimension preferred = new Dimension(currentScrollPaneWidth, targetScrollPaneHeight);
-        final Dimension maximum = new Dimension(currentScrollPaneWidth, targetScrollPaneHeight);
+        final Dimension preferred = new Dimension(
+            currentScrollPaneWidth,
+            targetScrollPaneHeight
+        );
+        final Dimension maximum = new Dimension(
+            currentScrollPaneWidth,
+            targetScrollPaneHeight
+        );
 
         // Agendar a atualização para o final da fila de eventos do Swing
-        // Isso pode ajudar com instabilidades durante redimensionamentos rápidos
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                if (buttonsScrollPane == null || sidePanel == null)
-                    return; // Check again
+        SwingUtilities.invokeLater(
+            new Runnable() {
+                @Override
+                public void run() {
+                    if (buttonsScrollPane == null || sidePanel == null) return; // Check again
 
-                buttonsScrollPane.setPreferredSize(preferred);
-                buttonsScrollPane.setMaximumSize(maximum);
+                    buttonsScrollPane.setPreferredSize(preferred);
+                    buttonsScrollPane.setMaximumSize(maximum);
 
-                sidePanel.revalidate();
-                sidePanel.repaint();
+                    sidePanel.revalidate();
+                    sidePanel.repaint();
+                }
             }
-        });
+        );
     }
 
-    private void menuSairActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_menuSairActionPerformed
+    private void menuSairActionPerformed(final java.awt.event.ActionEvent evt) {
         // Fechar todas as janelas/jframes abertos
         for (final Frame frame : Frame.getFrames()) {
             if (frame.isDisplayable()) {
@@ -614,15 +710,13 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
             Thread.currentThread().interrupt();
         }
         System.exit(0);
-    }// GEN-LAST:event_menuSairActionPerformed
+    }
 
     private void configurarBotoesArredondados() {
         final Color hoverColor = new Color(0, 122, 57);
 
         // Lista de todos os botões do sidePanel
-        final JButton[] botoes = {
-                toggleSidebarButton,
-        };
+        final JButton[] botoes = { toggleSidebarButton };
 
         for (final JButton botao : botoes) {
             botao.setContentAreaFilled(false); // Sem fundo padrão
@@ -631,27 +725,37 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
             botao.setBorderPainted(true); // Sem borda
             botao.setFocusPainted(false); // Sem contorno ao clicar
 
-            botao.addMouseListener(new java.awt.event.MouseAdapter() {
-                @Override
-                public void mouseEntered(final java.awt.event.MouseEvent evt) {
-                    botao.setBackground(hoverColor);
-                }
+            botao.addMouseListener(
+                new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseEntered(
+                        final java.awt.event.MouseEvent evt
+                    ) {
+                        botao.setBackground(hoverColor);
+                    }
 
-                @Override
-                public void mouseExited(final java.awt.event.MouseEvent evt) {
-                    botao.setBackground(new Color(0, 0, 0, 0)); // volta a ser transparente
-                }
+                    @Override
+                    public void mouseExited(
+                        final java.awt.event.MouseEvent evt
+                    ) {
+                        botao.setBackground(new Color(0, 0, 0, 0)); // volta a ser transparente
+                    }
 
-                @Override
-                public void mousePressed(final java.awt.event.MouseEvent evt) {
-                    botao.setBackground(hoverColor);
-                }
+                    @Override
+                    public void mousePressed(
+                        final java.awt.event.MouseEvent evt
+                    ) {
+                        botao.setBackground(hoverColor);
+                    }
 
-                @Override
-                public void mouseReleased(final java.awt.event.MouseEvent evt) {
-                    botao.setBackground(hoverColor);
+                    @Override
+                    public void mouseReleased(
+                        final java.awt.event.MouseEvent evt
+                    ) {
+                        botao.setBackground(hoverColor);
+                    }
                 }
-            });
+            );
         }
 
         // Configura cada botão principal
@@ -661,7 +765,6 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
                 botao.setFocusPainted(false);
                 botao.setContentAreaFilled(true);
                 botao.setBorderPainted(false);
-                // botao.setBackground(new Color(70, 130, 180)); // Cor dos botões principais
                 botao.setForeground(Color.WHITE);
             }
         }
@@ -670,48 +773,53 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
         SwingUtilities.updateComponentTreeUI(this);
     }
 
-    private void toggleSidebarButtonActionPerformed(final java.awt.event.ActionEvent evt) {// GEN-FIRST:event_toggleSidebarButtonActionPerformed
+    private void toggleSidebarButtonActionPerformed(
+        final java.awt.event.ActionEvent evt
+    ) {
         isSidebarExpanded = !isSidebarExpanded;
 
         if (isSidebarExpanded) {
-            sidePanel.setPreferredSize(new Dimension(EXPANDED_WIDTH, getHeight()));
+            sidePanel.setPreferredSize(
+                new Dimension(EXPANDED_WIDTH, getHeight())
+            );
             toggleSidebarButton.setText("<");
             titulo.setVisible(true);
             jSeparator.setVisible(true);
             // Mostra todos os botões
             for (final Component comp : sidePanel.getComponents()) {
-                if (comp != toggleSidebarButton && comp != titulo && comp != jSeparator) {
+                if (
+                    comp != toggleSidebarButton &&
+                    comp != titulo &&
+                    comp != jSeparator
+                ) {
                     comp.setVisible(true);
                 }
             }
             buttonsPanel.setVisible(true); // Mostrar botões
         } else {
-            sidePanel.setPreferredSize(new Dimension(COLLAPSED_WIDTH, getHeight()));
+            sidePanel.setPreferredSize(
+                new Dimension(COLLAPSED_WIDTH, getHeight())
+            );
             toggleSidebarButton.setText(">");
             titulo.setVisible(false);
             jSeparator.setVisible(false);
             // Esconde todos os botões exceto o toggle e version
             for (final Component comp : sidePanel.getComponents()) {
-                if (comp != toggleSidebarButton && comp != titulo && comp != jSeparator) {
+                if (
+                    comp != toggleSidebarButton &&
+                    comp != titulo &&
+                    comp != jSeparator
+                ) {
                     comp.setVisible(false);
                 }
             }
             buttonsPanel.setVisible(false); // Esconder botões
-
         }
-
-        // // Reposiciona o toggle button no canto superior direito
-        // toggleSidebarButton.setBounds(
-        // isSidebarExpanded ? EXPANDED_WIDTH - 30 : COLLAPSED_WIDTH - 30,
-        // 10,
-        // 30,
-        // 30);
-
         sidePanel.revalidate();
         sidePanel.repaint();
-    }// GEN-LAST:event_toggleSidebarButtonActionPerformed
-     // Método para atualizar todos os componentes
+    }
 
+    // Método para atualizar todos os componentes
     private void atualizarUI() {
         SwingUtilities.updateComponentTreeUI(this); // Atualiza o JFrame principal
     }
@@ -755,15 +863,17 @@ public class MainWindow extends JFrame implements SidebarListener, RenewDbListen
         button.setBackground(new Color(0, 163, 53));
 
         // Efeito hover
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(final java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(0, 122, 57));
-            }
+        button.addMouseListener(
+            new java.awt.event.MouseAdapter() {
+                public void mouseEntered(final java.awt.event.MouseEvent evt) {
+                    button.setBackground(new Color(0, 122, 57));
+                }
 
-            public void mouseExited(final java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(0, 163, 53));
+                public void mouseExited(final java.awt.event.MouseEvent evt) {
+                    button.setBackground(new Color(0, 163, 53));
+                }
             }
-        });
+        );
 
         return button;
     }

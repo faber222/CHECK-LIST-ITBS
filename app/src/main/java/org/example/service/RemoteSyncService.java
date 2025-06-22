@@ -6,14 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-// Futuramente, para buscar dados:
-// import java.sql.PreparedStatement;
-// import java.sql.ResultSet;
-// import java.util.ArrayList;
-// import java.util.List;
-// import org.example.model.Categorias;
-// import org.example.model.Checklist;
-// import org.example.model.ChecklistItens;
 import java.util.List;
 
 import org.example.model.Categorias;
@@ -25,7 +17,7 @@ public class RemoteSyncService {
     private static final String DB_USER = "SuporteRedes";
     private static final String DB_PASSWORD = "SuporteRedes@1212";
     private static final String DB_NAME = "redes_db";
-    private static final String MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver"; // Para MySQL Connector/J 8.x
+    private static final String MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver"; 
 
     /**
      * Tenta estabelecer uma conexão com o servidor MySQL remoto.
