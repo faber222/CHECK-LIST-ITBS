@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -27,6 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -160,8 +162,23 @@ public class ChecklistViewer extends JPanel {
         if (itens != null) {
             for (final ChecklistItem item : itens) {
                 if (item.tipo == ChecklistType.CHECKBOX) {
-                    final JCheckBox cb = new JCheckBox(item.nome);
+                    final TextoCheckbox texto = new TextoCheckbox(
+                        item.nome,
+                        quebrarEmLinhas(item.nome, 100)
+                    );
+                    
+                    final JCheckBox cb = new JCheckBox("<html>" + texto.formatadoHtml + "</html>");
                     cb.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    cb.setHorizontalAlignment(SwingConstants.LEFT);
+                    cb.setMaximumSize(new Dimension(Integer.MAX_VALUE, cb.getPreferredSize().height));
+                    cb.putClientProperty("textoOriginal", texto.original); 
+                    cb.addItemListener(e -> {
+                        if (cb.isSelected()) {
+                            cb.setText("<html><strike>" + texto.formatadoHtml + "</strike></html>");
+                        } else {
+                            cb.setText("<html>" + texto.formatadoHtml + "</html>");
+                        }
+                    });
                     checklistContentPanel.add(cb);
                 } else if (item.tipo == ChecklistType.TEXTAREA) {
                     final JLabel label = new JLabel(item.nome + ":");
@@ -177,7 +194,18 @@ public class ChecklistViewer extends JPanel {
         checklistContentPanel.revalidate();
         checklistContentPanel.repaint();
     }
+    
+    private static class TextoCheckbox {
+        final String original;
+        final String formatadoHtml;
+    
+        TextoCheckbox(String original, String formatadoHtml) {
+            this.original = original;
+            this.formatadoHtml = formatadoHtml;
+        }
+    }
 
+    
     private boolean houveAlteracoes() {
         for (final Component comp : checklistContentPanel.getComponents()) {
             if (comp instanceof JCheckBox) {
@@ -198,6 +226,27 @@ public class ChecklistViewer extends JPanel {
         }
         return false;
     }
+    
+    private String quebrarEmLinhas(String texto, int maxCharsPorLinha) {
+        String[] palavras = texto.split(" ");
+        StringBuilder sb = new StringBuilder();
+        int linhaAtual = 0;
+    
+        for (String palavra : palavras) {
+            if (linhaAtual + palavra.length() > maxCharsPorLinha) {
+                sb.append("<br>");
+                linhaAtual = 0;
+            } else if (sb.length() > 0) {
+                sb.append(" ");
+                linhaAtual += 1;
+            }
+            sb.append(palavra);
+            linhaAtual += palavra.length();
+        }
+    
+        return sb.toString();
+    }
+
 
     private void btnCopiarActionPerformed(final java.awt.event.ActionEvent evt) {
         final StringBuilder sb = new StringBuilder();
@@ -205,10 +254,13 @@ public class ChecklistViewer extends JPanel {
         for (final Component comp : checklistContentPanel.getComponents()) {
             if (comp instanceof JCheckBox) {
                 final JCheckBox check = (JCheckBox) comp;
-                if (check.isSelected()) {
-                    sb.append("[✓] ").append(check.getText()).append("\n");
-                } else {
-                    sb.append("[ ] ").append(check.getText()).append("\n");
+                final String textoOriginal = (String) check.getClientProperty("textoOriginal");
+                if(textoOriginal != null){
+                    if (check.isSelected()) {
+                        sb.append("[✓] ").append(textoOriginal).append("\n");
+                    } else {
+                        sb.append("[  ] ").append(textoOriginal).append("\n");
+                    }
                 }
             } else if (comp instanceof JScrollPane) {
                 final JScrollPane scroll = (JScrollPane) comp;
